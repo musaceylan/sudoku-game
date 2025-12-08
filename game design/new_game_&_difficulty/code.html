@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>New Game &amp; Difficulty - Sudoku</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#13daec",
+            "background-light": "#f6f8f8",
+            "background-dark": "#102022",
+            "text-light": "#102022",
+            "text-dark": "#f6f8f8",
+            "card-light": "#ffffff",
+            "card-dark": "#1c2c2e",
+            "easy": "#a3e635",
+            "medium": "#38bdf8",
+            "hard": "#f97316",
+            "expert": "#ef4444"
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+          boxShadow: {
+            'soft-easy': '0 4px 16px -4px rgb(163 230 53 / 0.4)',
+            'soft-medium': '0 4px 16px -4px rgb(56 189 248 / 0.4)',
+            'soft-hard': '0 4px 16px -4px rgb(249 115 22 / 0.4)',
+            'soft-expert': '0 4px 16px -4px rgb(239 68 68 / 0.4)',
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    body {
+      min-height: max(884px, 100dvh);
+    }
+    .btn-gradient-easy {
+        background: linear-gradient(to top right, #a3e635, #bef264);
+    }
+    .btn-gradient-medium {
+        background: linear-gradient(to top right, #38bdf8, #7dd3fc);
+    }
+    .btn-gradient-hard {
+        background: linear-gradient(to top right, #f97316, #fb923c);
+    }
+    .btn-gradient-expert {
+        background: linear-gradient(to top right, #ef4444, #f87171);
+    }
+  </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+<div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+<div class="flex items-center p-4 pb-2 justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm z-10">
+<button class="flex size-12 shrink-0 items-center justify-start transition-transform active:scale-90">
+<span class="material-symbols-outlined text-3xl">arrow_back_ios_new</span>
+</button>
+<h1 class="text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center">New Game</h1>
+<div class="size-12 shrink-0"></div> 
+</div>
+<main class="flex-grow p-4 space-y-6">
+<a class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-easy hover:scale-[1.03] active:scale-[0.98]" href="#">
+<div class="flex items-center gap-4 p-4">
+<div class="flex items-center justify-center size-20 rounded-lg bg-easy/20 dark:bg-easy/10">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-contain" data-alt="A simple green leaf icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB9o7375hhTNGGLQmDbkOTbEV69BpqYq4OVhidbuvnM0G2o_166eg-3zU420fAlkt1aPgJ54lYDd01HT4DDKTLGB1KN9kGiG04KLnTazejFmFDtl1t2PsZ-Z-qeZPdi-XP4XkhYP3Yit3xNyQLQO4rqrty5A3MLbwAEzBrzQg_CZD1E1QUZi2jQzrRo5AmByc3OE24qusOWXSdZi8bulCcTGhVf53Tl02Q9CgyqRe_QLPzF74UMZLsTBsRyuTD69m0M41K2MgCYc2dl");'></div>
+</div>
+<div class="flex-grow">
+<p class="text-lg font-bold leading-tight tracking-[-0.015em]">Easy</p>
+<div class="flex flex-col gap-1 mt-1">
+<p class="text-base font-normal leading-normal text-easy">★<span class="opacity-30">☆☆☆</span></p>
+<p class="text-sm font-normal leading-normal text-text-light/70 dark:text-text-dark/70">Best Time: 12:45</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-light/40 dark:text-text-dark/40 transition-transform duration-300 group-hover/card:translate-x-1">chevron_right</span>
+</div>
+<div class="px-4 pb-4">
+<button class="btn-gradient-easy w-full h-12 rounded-lg text-white font-bold text-lg shadow-sm transition-transform duration-200 active:scale-95 active:shadow-inner">Play</button>
+</div>
+</a>
+<a class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-medium hover:scale-[1.03] active:scale-[0.98]" href="#">
+<div class="flex items-center gap-4 p-4">
+<div class="flex items-center justify-center size-20 rounded-lg bg-medium/20 dark:bg-medium/10">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-contain" data-alt="A light blue brain icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCSWQgYP6aTi1dExHq-2jydajemHMo150UHgGJuNA-kv6DeHHshe37yqBHQ3OtOerjpehkfPRWpNjtexOSMKSrZoVMyqYZpRmKrOuOFnSFomBmqGE6YBX0-1kGWOEZUB7cNXiVd9YYpuWiHk0bYI_wkMZ4tNOf-KiXKC3woNJZxg5hFucr7WIBeRxg2MuXv3w8LAzgDg9F0whJxn1nK9Nkmn1_XwXB7cg5nTMBnNUOTALhhegZQwj9Sv78YOSvT8W3sBPAJz8AIqYAn");'></div>
+</div>
+<div class="flex-grow">
+<p class="text-lg font-bold leading-tight tracking-[-0.015em]">Medium</p>
+<div class="flex flex-col gap-1 mt-1">
+<p class="text-base font-normal leading-normal text-medium">★★<span class="opacity-30">☆☆</span></p>
+<p class="text-sm font-normal leading-normal text-text-light/70 dark:text-text-dark/70">Best Time: 23:15</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-light/40 dark:text-text-dark/40 transition-transform duration-300 group-hover/card:translate-x-1">chevron_right</span>
+</div>
+<div class="px-4 pb-4">
+<button class="btn-gradient-medium w-full h-12 rounded-lg text-white font-bold text-lg shadow-sm transition-transform duration-200 active:scale-95 active:shadow-inner">Play</button>
+</div>
+</a>
+<a class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-hard hover:scale-[1.03] active:scale-[0.98]" href="#">
+<div class="flex items-center gap-4 p-4">
+<div class="flex items-center justify-center size-20 rounded-lg bg-hard/20 dark:bg-hard/10">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-contain" data-alt="An orange flame icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDOVOkjQzWGXBLlZMU75boqRo1e4gpExUdj1UTcYysmN8rIAOeGrDMQUArHOncUAsxO4MpZzVKUhbM5EztoXeItX7rM_yim-MbpLscSWOsUbWTd-JmaeUKIk5Fw145d5pYOAqssgfbWjqn13Pe7fQeAzLnk0H7NdS7szx77SK5T4IbwPip3MgxnEcJuBDr6vZ6kflGuLeRJtLRRJfPn3_EC6pOe0Ynk7oyRyuTrzZC8hGlCMQojul6Gah-upnWFJPTgfzvk5EY_ATsn");'></div>
+</div>
+<div class="flex-grow">
+<p class="text-lg font-bold leading-tight tracking-[-0.015em]">Hard</p>
+<div class="flex flex-col gap-1 mt-1">
+<p class="text-base font-normal leading-normal text-hard">★★★<span class="opacity-30">☆</span></p>
+<p class="text-sm font-normal leading-normal text-text-light/70 dark:text-text-dark/70">Best Time: 35:50</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-light/40 dark:text-text-dark/40 transition-transform duration-300 group-hover/card:translate-x-1">chevron_right</span>
+</div>
+<div class="px-4 pb-4">
+<button class="btn-gradient-hard w-full h-12 rounded-lg text-white font-bold text-lg shadow-sm transition-transform duration-200 active:scale-95 active:shadow-inner">Play</button>
+</div>
+</a>
+<a class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-expert hover:scale-[1.03] active:scale-[0.98]" href="#">
+<div class="flex items-center gap-4 p-4">
+<div class="flex items-center justify-center size-20 rounded-lg bg-expert/20 dark:bg-expert/10">
+<div class="w-full bg-center bg-no-repeat aspect-square bg-contain" data-alt="A red skull icon" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBbqIpbJMCKoOWDdJ7wxXeCLSDs4ptkZXOo3qs9QlqKZ2Ksv8naLA8-1QshPVXPEDFB4VXqfHF2QUHJ5MePGrNMyRsUnSgHYzxSroY75DfbRfJ-xQ3n1BjvKt1eMm4UQ56uTBY6MgflLKRjksalY0uqrIIIRJqu3eEojiezg3YQYUccWAMTdFCtLEZNbSbIMIaBrWbV3ZxUkfA6Bf5cGbT1pDVBnEtnnWeDWUFM0ODqAacvTqdFA87XV4Zmd5rQ0IXlOfgGtByBBabe");'></div>
+</div>
+<div class="flex-grow">
+<p class="text-lg font-bold leading-tight tracking-[-0.015em]">Expert</p>
+<div class="flex flex-col gap-1 mt-1">
+<p class="text-base font-normal leading-normal text-expert">★★★★</p>
+<p class="text-sm font-normal leading-normal text-text-light/70 dark:text-text-dark/70">Not yet completed</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-text-light/40 dark:text-text-dark/40 transition-transform duration-300 group-hover/card:translate-x-1">chevron_right</span>
+</div>
+<div class="px-4 pb-4">
+<button class="btn-gradient-expert w-full h-12 rounded-lg text-white font-bold text-lg shadow-sm transition-transform duration-200 active:scale-95 active:shadow-inner">Play</button>
+</div>
+</a>
+</main>
+</div>
+
+</body></html>

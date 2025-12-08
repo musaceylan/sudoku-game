@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#13daec">
+  <link rel="manifest" href="manifest.json">
+  <title>Sudoku Play - Main Menu</title>
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link href="https://fonts.googleapis.com" rel="preconnect" />
+  <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200..800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+    rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#13daec",
+            "primary-darker": "#21c2d2",
+            "background-light": "#f6f8f8",
+            "background-dark": "#102022",
+            "text-light": "#102022",
+            "text-dark": "#f6f8f8",
+            "card-light": "#ffffff",
+            "card-dark": "#1a2c2e",
+            "secondary-light": "#e0f8fa",
+            "secondary-dark": "#213f43"
+          },
+          fontFamily: {
+            "display": ["Plus Jakarta Sans", "sans-serif"]
+          },
+          borderRadius: {
+            "DEFAULT": "0.25rem",
+            "lg": "0.5rem",
+            "xl": "0.75rem",
+            "full": "9999px"
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body {
+      min-height: max(884px, 100dvh);
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
+</head>
+
+<body class="font-display">
+  <div
+    class="relative flex h-auto min-h-screen w-full flex-col bg-background-light dark:bg-background-dark group/design-root overflow-x-hidden text-text-light dark:text-text-dark">
+    <div class="flex-grow flex flex-col justify-center px-4">
+      <div class="flex flex-col items-center pt-16 pb-8">
+        <svg fill="none" height="64" viewBox="0 0 64 64" width="64" xmlns="http://www.w3.org/2000/svg">
+          <rect fill="url(#paint0_linear_1_2)" height="64" rx="16" width="64"></rect>
+          <path
+            d="M21.3333 16H18.6667C17.2 16 16 17.2 16 18.6667V21.3333M21.3333 48H18.6667C17.2 48 16 46.8 16 45.3333V42.6667M42.6667 16H45.3333C46.8 16 48 17.2 48 18.6667V21.3333M42.6667 48H45.3333C46.8 48 48 46.8 48 45.3333V42.6667"
+            stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+          <rect fill="white" height="6" rx="1" width="6" x="23" y="23"></rect>
+          <rect fill="white" height="6" rx="1" width="6" x="35" y="23"></rect>
+          <rect fill="white" height="6" rx="1" width="6" x="23" y="35"></rect>
+          <rect fill="white" height="6" rx="1" width="6" x="35" y="35"></rect>
+          <defs>
+            <linearGradient gradientUnits="userSpaceOnUse" id="paint0_linear_1_2" x1="0" x2="64" y1="0" y2="64">
+              <stop stop-color="#13daec"></stop>
+              <stop offset="1" stop-color="#21c2d2"></stop>
+            </linearGradient>
+          </defs>
+        </svg>
+        <h1
+          class="text-[#0d1a1b] dark:text-gray-100 tracking-tight text-[32px] font-bold leading-tight pt-4 text-center">
+          Sudoku Play</h1>
+      </div>
+      <div class="flex flex-col flex-grow justify-center">
+        <div class="flex justify-center">
+          <div class="flex flex-1 gap-4 max-w-[480px] flex-col items-stretch px-4 py-3">
+            <button onclick="window.location.href='difficulty.html'"
+              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-gradient-to-br from-primary to-primary-darker text-white text-lg font-bold leading-normal tracking-[0.015em] w-full shadow-lg shadow-primary/30 transition-transform duration-200 ease-in-out hover:scale-[1.02] active:scale-[0.98]">
+              <span class="truncate">New Game</span>
+            </button>
+            <button onclick="continueGame()"
+              class="flex min-w-[84px] max-w-[480px] cursor-pointer items-center justify-center overflow-hidden rounded-xl h-14 px-5 bg-card-light dark:bg-card-dark text-text-light dark:text-text-dark text-lg font-bold leading-normal tracking-[0.015em] w-full border border-gray-200 dark:border-gray-700 shadow-sm transition-transform duration-200 ease-in-out hover:scale-[1.02] active:scale-[0.98]">
+              <span class="truncate">Continue</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="flex justify-center gap-2 px-4 py-6">
+      <div
+        class="flex justify-center gap-4 bg-card-light dark:bg-card-dark p-2 rounded-full shadow-md shadow-slate-200/50 dark:shadow-black/20 border border-gray-200 dark:border-gray-800">
+        <button onclick="showStats()"
+          class="p-3 rounded-full text-text-light dark:text-text-dark hover:bg-secondary-light dark:hover:bg-secondary-dark transition-all duration-200 ease-in-out hover:scale-110 active:scale-95">
+          <span class="material-symbols-outlined text-2xl">bar_chart</span>
+        </button>
+        <button onclick="toggleSettings()"
+          class="p-3 rounded-full text-text-light dark:text-text-dark hover:bg-secondary-light dark:hover:bg-secondary-dark transition-all duration-200 ease-in-out hover:scale-110 active:scale-95">
+          <span class="material-symbols-outlined text-2xl">settings</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Check for saved game
+    function continueGame() {
+      const savedGame = localStorage.getItem('sudoku_current_game');
+      if (savedGame) {
+        window.location.href = 'game.html';
+      } else {
+        alert('No saved game found. Please start a new game!');
+      }
+    }
+
+    function showStats() {
+      alert('Statistics feature coming soon!');
+    }
+
+    function toggleSettings() {
+      // Toggle dark mode for now
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('darkMode', document.documentElement.classList.contains('dark'));
+    }
+
+    // Load dark mode preference
+    if (localStorage.getItem('darkMode') === 'true') {
+      document.documentElement.classList.add('dark');
+    }
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('Service Worker registered'))
+          .catch(err => console.log('Service Worker registration failed'));
+      });
+    }
+  </script>
+</body>
+
+</html>

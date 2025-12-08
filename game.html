@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#13daec">
+    <title>Sudoku Game Board</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13daec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#102022",
+                        "cell-bg-light": "#ffffff",
+                        "cell-bg-dark": "#1a2c2e",
+                        "cell-highlight-light": "#e3f8fa",
+                        "cell-highlight-dark": "#1e3a3d",
+                        "cell-selected-light": "#13daec40",
+                        "cell-selected-dark": "#13daec59",
+                        "text-light": "#102022",
+                        "text-dark": "#e3f8fa",
+                        "text-secondary-light": "#5b6d70",
+                        "text-secondary-dark": "#a0b5b9",
+                        "text-user-light": "#007AFF",
+                        "text-user-dark": "#409cff",
+                        "hint-bg-light": "#fef8e3",
+                        "hint-bg-dark": "#362e15",
+                        "hint-text-light": "#FF9500",
+                        "hint-text-dark": "#ffc400",
+                        "error-light": "#ef4444",
+                        "error-dark": "#f87171",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings:
+                'FILL' 0,
+                'wght' 400,
+                'GRAD' 0,
+                'opsz' 24
+        }
+
+        body {
+            min-height: max(884px, 100dvh);
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        .cell {
+            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+            cursor: pointer;
+        }
+
+        .cell.selected {
+            transform: scale(1.05);
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(19, 218, 236, 0.4);
+        }
+
+        .dark .cell.selected {
+            box-shadow: 0 4px 16px rgba(19, 218, 236, 0.2);
+        }
+
+        .cell.error {
+            background-color: rgba(239, 68, 68, 0.2) !important;
+            animation: shake 0.3s;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .cell.highlight-same {
+            background-color: rgba(19, 218, 236, 0.1) !important;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+    <div class="relative flex h-auto min-h-screen w-full flex-col group/design-root overflow-x-hidden">
+        <div
+            class="flex items-center bg-background-light dark:bg-background-dark p-4 pb-2 justify-between sticky top-0 z-10">
+            <div class="flex size-12 shrink-0 items-center justify-start">
+                <button onclick="pauseGame()" class="transition-transform active:scale-90">
+                    <span class="material-symbols-outlined text-3xl text-text-light dark:text-text-dark"
+                        id="pause-icon">pause</span>
+                </button>
+            </div>
+            <h2 class="text-text-light dark:text-text-dark text-lg font-bold leading-tight tracking-[-0.015em] flex-1 text-center"
+                id="difficulty-label">Easy</h2>
+            <div class="flex w-12 items-center justify-end">
+                <p class="text-primary text-base font-bold leading-normal tracking-[0.015em] shrink-0" id="timer">00:00
+                </p>
+            </div>
+        </div>
+        <main class="flex flex-col grow justify-between p-4">
+            <div class="w-full max-w-sm mx-auto aspect-square bg-transparent p-2">
+                <div id="sudoku-grid"
+                    class="grid grid-cols-9 grid-rows-9 gap-px bg-slate-200 dark:bg-slate-700 w-full h-full rounded-lg overflow-hidden shadow-sm dark:shadow-md dark:shadow-black/20">
+                    <!-- Grid cells will be generated by JavaScript -->
+                </div>
+            </div>
+            <div class="flex-grow"></div>
+            <div class="flex flex-col gap-4 w-full max-w-sm mx-auto">
+                <div class="grid grid-cols-3 gap-3">
+                    <button onclick="undo()"
+                        class="flex flex-col items-center justify-center gap-1.5 py-3 bg-gradient-to-br from-white to-gray-100 dark:from-cell-bg-dark dark:to-background-dark rounded-xl shadow-md dark:shadow-lg dark:shadow-black/25 text-text-secondary-light dark:text-text-secondary-dark active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-2xl">undo</span>
+                        <span class="text-xs font-semibold">Undo</span>
+                    </button>
+                    <button onclick="erase()"
+                        class="flex flex-col items-center justify-center gap-1.5 py-3 bg-gradient-to-br from-white to-gray-100 dark:from-cell-bg-dark dark:to-background-dark rounded-xl shadow-md dark:shadow-lg dark:shadow-black/25 text-text-secondary-light dark:text-text-secondary-dark active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-2xl">backspace</span>
+                        <span class="text-xs font-semibold">Erase</span>
+                    </button>
+                    <button onclick="hint()"
+                        class="flex flex-col items-center justify-center gap-1.5 py-3 bg-gradient-to-br from-amber-50 to-amber-100 dark:from-hint-bg-dark dark:to-[#4a3f1b] rounded-xl shadow-md dark:shadow-lg dark:shadow-black/25 text-hint-text-light dark:text-hint-text-dark active:scale-95 transition-transform">
+                        <span class="material-symbols-outlined text-2xl">lightbulb</span>
+                        <span class="text-xs font-semibold">Hint</span>
+                    </button>
+                </div>
+                <div id="number-pad" class="grid grid-cols-9 gap-2">
+                    <!-- Number buttons will be generated by JavaScript -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="sudoku.js"></script>
+</body>
+
+</html>
