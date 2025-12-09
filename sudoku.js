@@ -123,7 +123,7 @@ class SudokuGame {
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 const cell = document.createElement('div');
-                cell.className = 'cell bg-cell-bg-light dark:bg-cell-bg-dark flex items-center justify-center font-bold text-xl shadow-inner shadow-black/5 dark:shadow-black/20';
+                cell.className = 'cell bg-cell-bg-light dark:bg-cell-bg-dark flex items-center justify-center font-bold text-lg sm:text-xl';
                 cell.dataset.row = row;
                 cell.dataset.col = col;
 
@@ -177,9 +177,9 @@ class SudokuGame {
             const isComplete = count >= 9;
 
             if (isComplete) {
-                button.className = 'aspect-square flex items-center justify-center bg-primary/20 dark:bg-primary/20 text-primary dark:text-primary rounded-lg text-2xl font-bold shadow-sm dark:shadow-md dark:shadow-black/20 transition-transform active:scale-95';
+                button.className = 'aspect-square flex items-center justify-center bg-primary/20 dark:bg-primary/20 text-primary dark:text-primary rounded-lg text-xl sm:text-2xl font-bold shadow-sm dark:shadow-md dark:shadow-black/20 transition-transform active:scale-95 opacity-50';
             } else {
-                button.className = 'aspect-square flex items-center justify-center bg-cell-bg-light dark:bg-cell-bg-dark text-text-light dark:text-text-dark rounded-lg text-2xl font-bold shadow-md dark:shadow-lg dark:shadow-black/25 transition-transform active:scale-95';
+                button.className = 'aspect-square flex items-center justify-center bg-cell-bg-light dark:bg-cell-bg-dark text-text-light dark:text-text-dark rounded-lg text-xl sm:text-2xl font-bold shadow-md dark:shadow-lg dark:shadow-black/25 transition-transform active:scale-95';
             }
 
             button.textContent = num;
