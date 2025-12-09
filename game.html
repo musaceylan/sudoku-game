@@ -171,6 +171,28 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-card-dark rounded-2xl p-6 mx-4 max-w-sm w-full shadow-2xl transform transition-all">
+            <div id="modal-icon" class="text-6xl text-center mb-4">🎉</div>
+            <h3 id="modal-title" class="text-xl font-bold text-center mb-2">Congratulations!</h3>
+            <p id="modal-message" class="text-center text-gray-600 dark:text-gray-300 mb-4">You solved the puzzle!</p>
+            <div id="modal-stats" class="flex justify-center gap-6 mb-6">
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-primary" id="modal-time">00:00</div>
+                    <div class="text-xs text-gray-500">Time</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-2xl font-bold text-primary" id="modal-mistakes">0</div>
+                    <div class="text-xs text-gray-500">Mistakes</div>
+                </div>
+            </div>
+            <button onclick="closeModal()" class="w-full py-3 bg-gradient-to-r from-primary to-primary-darker text-white font-bold rounded-xl shadow-lg active:scale-95 transition-transform">
+                Continue
+            </button>
+        </div>
+    </div>
+
     <script src="sudoku.js"></script>
 </body>
 

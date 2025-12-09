@@ -329,10 +329,9 @@ class SudokuGame {
     // Game over
     gameOver(won) {
         this.stopTimer();
+        const timeStr = this.formatTime(this.timer);
 
         if (won) {
-            const timeStr = this.formatTime(this.timer);
-
             // Save best time
             const bestTimeKey = `sudoku_best_${this.difficulty}`;
             const currentBest = localStorage.getItem(bestTimeKey);
@@ -342,12 +341,12 @@ class SudokuGame {
             }
 
             setTimeout(() => {
-                alert(`🎉 Congratulations! You solved the puzzle in ${timeStr}!`);
-                window.location.href = 'difficulty.html';
-            }, 500);
+                showModal(true, timeStr, this.mistakes);
+            }, 300);
         } else {
-            alert('😔 Game Over! Too many mistakes. Try again!');
-            window.location.href = 'difficulty.html';
+            setTimeout(() => {
+                showModal(false, timeStr, this.mistakes);
+            }, 300);
         }
 
         localStorage.removeItem('sudoku_current_game');
@@ -478,3 +477,32 @@ document.addEventListener('visibilitychange', () => {
         game.pauseGame();
     }
 });
+
+// Modal functions
+function showModal(won, time, mistakes) {
+    const modal = document.getElementById('modal');
+    const icon = document.getElementById('modal-icon');
+    const title = document.getElementById('modal-title');
+    const message = document.getElementById('modal-message');
+    const timeEl = document.getElementById('modal-time');
+    const mistakesEl = document.getElementById('modal-mistakes');
+
+    if (won) {
+        icon.textContent = '🎉';
+        title.textContent = 'Congratulations!';
+        message.textContent = 'You solved the puzzle!';
+    } else {
+        icon.textContent = '😔';
+        title.textContent = 'Game Over';
+        message.textContent = 'Too many mistakes. Try again!';
+    }
+
+    timeEl.textContent = time;
+    mistakesEl.textContent = mistakes;
+    modal.classList.remove('hidden');
+}
+
+function closeModal() {
+    document.getElementById('modal').classList.add('hidden');
+    window.location.href = 'difficulty.html';
+}
