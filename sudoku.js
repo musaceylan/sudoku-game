@@ -165,6 +165,15 @@ class SudokuGame {
 
         this.renderNumberPad();
         this.updateDifficultyLabel();
+        this.updateMistakes();
+    }
+
+    // Update mistakes display
+    updateMistakes() {
+        const el = document.getElementById('mistakes');
+        if (el) {
+            el.textContent = `${this.mistakes}/${this.maxMistakes} mistakes`;
+        }
     }
 
     // Render number pad
