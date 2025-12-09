@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Sudoku Game</string>
+    <string name="title_activity_main">Sudoku Game</string>
+    <string name="package_name">com.ceylan.sudoku</string>
+    <string name="custom_url_scheme">com.ceylan.sudoku</string>
+</resources>
