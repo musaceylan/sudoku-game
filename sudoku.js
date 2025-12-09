@@ -119,11 +119,14 @@ class SudokuGame {
     render() {
         const gridElement = document.getElementById('sudoku-grid');
         gridElement.innerHTML = '';
+        const isDark = document.documentElement.classList.contains('dark');
 
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 const cell = document.createElement('div');
-                cell.className = 'cell bg-cell-bg-light dark:bg-cell-bg-dark flex items-center justify-center font-bold text-lg sm:text-xl';
+                cell.className = 'cell flex items-center justify-center font-bold text-base sm:text-lg';
+                cell.style.backgroundColor = isDark ? '#1a2c2e' : '#ffffff';
+                cell.style.color = isDark ? '#e3f8fa' : '#102022';
                 cell.dataset.row = row;
                 cell.dataset.col = col;
 
@@ -143,10 +146,10 @@ class SudokuGame {
 
                     // Initial numbers (not editable)
                     if (this.initialGrid[row][col] !== 0) {
-                        cell.classList.add('text-text-light', 'dark:text-text-dark');
+                        cell.style.color = isDark ? '#e3f8fa' : '#102022';
                     } else {
                         // User-entered numbers
-                        cell.classList.add('text-text-user-light', 'dark:text-text-user-dark', 'font-semibold');
+                        cell.style.color = isDark ? '#409cff' : '#007AFF';
                     }
 
                     // Highlight same numbers

@@ -96,114 +96,83 @@
             <h1 class="text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center">New Game</h1>
             <div class="size-12 shrink-0"></div>
         </div>
-        <main class="flex-grow p-4 space-y-6">
+        <main class="flex-grow p-3 space-y-3 overflow-y-auto">
             <!-- Easy -->
             <div
                 class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-easy hover:scale-[1.03] active:scale-[0.98]">
-                <div class="flex items-center gap-4 p-4">
-                    <div class="flex items-center justify-center size-20 rounded-lg bg-easy/20 dark:bg-easy/10">
+                <div class="flex items-center gap-3 p-3">
+                    <div class="flex items-center justify-center size-14 rounded-lg bg-easy/20 dark:bg-easy/10">
                         <div class="w-full bg-center bg-no-repeat aspect-square bg-contain"
                             data-alt="A simple green leaf icon"
                             style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB9o7375hhTNGGLQmDbkOTbEV69BpqYq4OVhidbuvnM0G2o_166eg-3zU420fAlkt1aPgJ54lYDd01HT4DDKTLGB1KN9kGiG04KLnTazejFmFDtl1t2PsZ-Z-qeZPdi-XP4XkhYP3Yit3xNyQLQO4rqrty5A3MLbwAEzBrzQg_CZD1E1QUZi2jQzrRo5AmByc3OE24qusOWXSdZi8bulCcTGhVf53Tl02Q9CgyqRe_QLPzF74UMZLsTBsRyuTD69m0M41K2MgCYc2dl");'>
                         </div>
                     </div>
                     <div class="flex-grow">
-                        <p class="text-lg font-bold leading-tight tracking-[-0.015em]">Easy</p>
-                        <div class="flex flex-col gap-1 mt-1">
-                            <p class="text-base font-normal leading-normal text-easy">★<span
-                                    class="opacity-30">☆☆☆</span></p>
-                            <p class="text-sm font-normal leading-normal text-text-light/70 dark:text-text-dark/70"
-                                id="easy-time">Best Time: --:--</p>
-                        </div>
+                        <p class="text-base font-bold leading-tight">Easy</p>
+                        <p class="text-sm text-easy">★<span class="opacity-30">☆☆☆</span></p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="easy-time">Best: --:--</p>
                     </div>
-                    <span
-                        class="material-symbols-outlined text-text-light/40 dark:text-text-dark/40 transition-transform duration-300 group-hover/card:translate-x-1">chevron_right</span>
-                </div>
-                <div class="px-4 pb-4">
                     <button onclick="startGame('easy')"
-                        class="btn-gradient-easy w-full h-12 rounded-lg text-white font-bold text-lg shadow-sm transition-transform duration-200 active:scale-95 active:shadow-inner">Play</button>
+                        class="btn-gradient-easy px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95">Play</button>
                 </div>
             </div>
 
             <!-- Medium -->
             <div
                 class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-medium hover:scale-[1.03] active:scale-[0.98]">
-                <div class="flex items-center gap-4 p-4">
-                    <div class="flex items-center justify-center size-20 rounded-lg bg-medium/20 dark:bg-medium/10">
+                <div class="flex items-center gap-3 p-3">
+                    <div class="flex items-center justify-center size-14 rounded-lg bg-medium/20 dark:bg-medium/10">
                         <div class="w-full bg-center bg-no-repeat aspect-square bg-contain"
                             data-alt="A light blue brain icon"
                             style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCSWQgYP6aTi1dExHq-2jydajemHMo150UHgGJuNA-kv6DeHHshe37yqBHQ3OtOerjpehkfPRWpNjtexOSMKSrZoVMyqYZpRmKrOuOFnSFomBmqGE6YBX0-1kGWOEZUB7cNXiVd9YYpuWiHk0bYI_wkMZ4tNOf-KiXKC3woNJZxg5hFucr7WIBeRxg2MuXv3w8LAzgDg9F0whJxn1nK9Nkmn1_XwXB7cg5nTMBnNUOTALhhegZQwj9Sv78YOSvT8W3sBPAJz8AIqYAn");'>
                         </div>
                     </div>
                     <div class="flex-grow">
-                        <p class="text-lg font-bold leading-tight tracking-[-0.015em]">Medium</p>
-                        <div class="flex flex-col gap-1 mt-1">
-                            <p class="text-base font-normal leading-normal text-medium">★★<span
-                                    class="opacity-30">☆☆</span></p>
-                            <p class="text-sm font-normal leading-normal text-text-light/70 dark:text-text-dark/70"
-                                id="medium-time">Best Time: --:--</p>
-                        </div>
+                        <p class="text-base font-bold leading-tight">Medium</p>
+                        <p class="text-sm text-medium">★★<span class="opacity-30">☆☆</span></p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="medium-time">Best: --:--</p>
                     </div>
-                    <span
-                        class="material-symbols-outlined text-text-light/40 dark:text-text-dark/40 transition-transform duration-300 group-hover/card:translate-x-1">chevron_right</span>
-                </div>
-                <div class="px-4 pb-4">
                     <button onclick="startGame('medium')"
-                        class="btn-gradient-medium w-full h-12 rounded-lg text-white font-bold text-lg shadow-sm transition-transform duration-200 active:scale-95 active:shadow-inner">Play</button>
+                        class="btn-gradient-medium px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95">Play</button>
                 </div>
             </div>
 
             <!-- Hard -->
             <div
                 class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-hard hover:scale-[1.03] active:scale-[0.98]">
-                <div class="flex items-center gap-4 p-4">
-                    <div class="flex items-center justify-center size-20 rounded-lg bg-hard/20 dark:bg-hard/10">
+                <div class="flex items-center gap-3 p-3">
+                    <div class="flex items-center justify-center size-14 rounded-lg bg-hard/20 dark:bg-hard/10">
                         <div class="w-full bg-center bg-no-repeat aspect-square bg-contain"
                             data-alt="An orange flame icon"
                             style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDOVOkjQzWGXBLlZMU75boqRo1e4gpExUdj1UTcYysmN8rIAOeGrDMQUArHOncUAsxO4MpZzVKUhbM5EztoXeItX7rM_yim-MbpLscSWOsUbWTd-JmaeUKIk5Fw145d5pYOAqssgfbWjqn13Pe7fQeAzLnk0H7NdS7szx77SK5T4IbwPip3MgxnEcJuBDr6vZ6kflGuLeRJtLRRJfPn3_EC6pOe0Ynk7oyRyuTrzZC8hGlCMQojul6Gah-upnWFJPTgfzvk5EY_ATsn");'>
                         </div>
                     </div>
                     <div class="flex-grow">
-                        <p class="text-lg font-bold leading-tight tracking-[-0.015em]">Hard</p>
-                        <div class="flex flex-col gap-1 mt-1">
-                            <p class="text-base font-normal leading-normal text-hard">★★★<span
-                                    class="opacity-30">☆</span></p>
-                            <p class="text-sm font-normal leading-normal text-text-light/70 dark:text-text-dark/70"
-                                id="hard-time">Best Time: --:--</p>
-                        </div>
+                        <p class="text-base font-bold leading-tight">Hard</p>
+                        <p class="text-sm text-hard">★★★<span class="opacity-30">☆</span></p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="hard-time">Best: --:--</p>
                     </div>
-                    <span
-                        class="material-symbols-outlined text-text-light/40 dark:text-text-dark/40 transition-transform duration-300 group-hover/card:translate-x-1">chevron_right</span>
-                </div>
-                <div class="px-4 pb-4">
                     <button onclick="startGame('hard')"
-                        class="btn-gradient-hard w-full h-12 rounded-lg text-white font-bold text-lg shadow-sm transition-transform duration-200 active:scale-95 active:shadow-inner">Play</button>
+                        class="btn-gradient-hard px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95">Play</button>
                 </div>
             </div>
 
             <!-- Expert -->
             <div
                 class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-expert hover:scale-[1.03] active:scale-[0.98]">
-                <div class="flex items-center gap-4 p-4">
-                    <div class="flex items-center justify-center size-20 rounded-lg bg-expert/20 dark:bg-expert/10">
+                <div class="flex items-center gap-3 p-3">
+                    <div class="flex items-center justify-center size-14 rounded-lg bg-expert/20 dark:bg-expert/10">
                         <div class="w-full bg-center bg-no-repeat aspect-square bg-contain" data-alt="A red skull icon"
                             style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBbqIpbJMCKoOWDdJ7wxXeCLSDs4ptkZXOo3qs9QlqKZ2Ksv8naLA8-1QshPVXPEDFB4VXqfHF2QUHJ5MePGrNMyRsUnSgHYzxSroY75DfbRfJ-xQ3n1BjvKt1eMm4UQ56uTBY6MgflLKRjksalY0uqrIIIRJqu3eEojiezg3YQYUccWAMTdFCtLEZNbSbIMIaBrWbV3ZxUkfA6Bf5cGbT1pDVBnEtnnWeDWUFM0ODqAacvTqdFA87XV4Zmd5rQ0IXlOfgGtByBBabe");'>
                         </div>
                     </div>
                     <div class="flex-grow">
-                        <p class="text-lg font-bold leading-tight tracking-[-0.015em]">Expert</p>
-                        <div class="flex flex-col gap-1 mt-1">
-                            <p class="text-base font-normal leading-normal text-expert">★★★★</p>
-                            <p class="text-sm font-normal leading-normal text-text-light/70 dark:text-text-dark/70"
-                                id="expert-time">Best Time: --:--</p>
-                        </div>
+                        <p class="text-base font-bold leading-tight">Expert</p>
+                        <p class="text-sm text-expert">★★★★</p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="expert-time">Best: --:--</p>
                     </div>
-                    <span
-                        class="material-symbols-outlined text-text-light/40 dark:text-text-dark/40 transition-transform duration-300 group-hover/card:translate-x-1">chevron_right</span>
-                </div>
-                <div class="px-4 pb-4">
                     <button onclick="startGame('expert')"
-                        class="btn-gradient-expert w-full h-12 rounded-lg text-white font-bold text-lg shadow-sm transition-transform duration-200 active:scale-95 active:shadow-inner">Play</button>
+                        class="btn-gradient-expert px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95">Play</button>
                 </div>
             </div>
         </main>
