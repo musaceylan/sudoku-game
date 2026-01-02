@@ -404,33 +404,44 @@ class SudokuGame {
 
     // Save game state
     saveGame() {
-        const gameState = {
-            grid: this.grid,
-            solution: this.solution,
-            initialGrid: this.initialGrid,
-            difficulty: this.difficulty,
-            timer: this.timer,
-            history: this.history,
-            mistakes: this.mistakes
-        };
-        localStorage.setItem('sudoku_current_game', JSON.stringify(gameState));
+        try {
+            const gameState = {
+                grid: this.grid,
+                solution: this.solution,
+                initialGrid: this.initialGrid,
+                difficulty: this.difficulty,
+                timer: this.timer,
+                history: this.history,
+                mistakes: this.mistakes
+            };
+            localStorage.setItem('sudoku_current_game', JSON.stringify(gameState));
+        } catch (e) {
+            console.error('Failed to save game:', e);
+        }
     }
 
     // Load saved game
     loadGame() {
-        const saved = localStorage.getItem('sudoku_current_game');
-        if (saved) {
-            const gameState = JSON.parse(saved);
-            this.grid = gameState.grid;
-            this.solution = gameState.solution;
-            this.initialGrid = gameState.initialGrid;
-            this.difficulty = gameState.difficulty;
-            this.timer = gameState.timer;
-            this.history = gameState.history || [];
-            this.mistakes = gameState.mistakes || 0;
-            this.startTimer();
-            this.render();
-            return true;
+        try {
+            const saved = localStorage.getItem('sudoku_current_game');
+            if (saved) {
+                const gameState = JSON.parse(saved);
+                if (gameState && gameState.grid && gameState.solution && gameState.initialGrid) {
+                    this.grid = gameState.grid;
+                    this.solution = gameState.solution;
+                    this.initialGrid = gameState.initialGrid;
+                    this.difficulty = gameState.difficulty || 'easy';
+                    this.timer = gameState.timer || 0;
+                    this.history = gameState.history || [];
+                    this.mistakes = gameState.mistakes || 0;
+                    this.startTimer();
+                    this.render();
+                    return true;
+                }
+            }
+        } catch (e) {
+            console.error('Failed to load saved game:', e);
+            localStorage.removeItem('sudoku_current_game');
         }
         return false;
     }

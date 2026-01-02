@@ -9,32 +9,60 @@ This is a mobile-friendly Sudoku game built with HTML, CSS, and JavaScript, desi
 ## Features
 
 - Classic Sudoku gameplay
+- Four difficulty levels (Easy, Medium, Hard, Expert)
 - Mobile-optimized interface
 - Touch-friendly controls
-- Responsive design for various screen sizes
+- Dark/Light mode support
+- Game save/resume functionality
+- Undo, Erase, and Hint features
+- Timer and mistake tracking
+- Best time statistics per difficulty
+- Progressive Web App (PWA) support
 
 ## Tech Stack
 
 - HTML5
-- CSS3
+- CSS3 with Tailwind CSS
 - JavaScript (Vanilla)
-- Progressive Web App (PWA) capabilities for mobile deployment
+- Capacitor for native iOS/Android deployment
+- Progressive Web App (PWA) capabilities
 
 ## Getting Started
 
 1. Clone this repository
-2. Open `index.html` in a web browser or deploy to a web server
-3. For mobile deployment, use tools like Cordova or Capacitor to package as native apps
+2. Run `npm install` to install dependencies
+3. Run `npm start` to start the development server
+4. Open `http://localhost:8000` in a web browser
 
-## Development
+### Mobile Deployment
 
-The project structure:
-- `index.html` - Main game interface
-- `style.css` - Game styling
-- `script.js` - Game logic
-- `manifest.json` - PWA configuration
+```bash
+# Build for Android
+npx cap add android
+npx cap sync android
+npx cap open android
+
+# Build for iOS
+npx cap add ios
+npx cap sync ios
+npx cap open ios
+```
+
+## Project Structure
+
+```
+sudoku-game/
+├── index.html          # Main menu
+├── difficulty.html     # Difficulty selection
+├── game.html           # Game board
+├── sudoku.js           # Core game logic
+├── sw.js               # Service worker for PWA
+├── manifest.json       # PWA configuration
+├── capacitor.config.json
+├── android/            # Android project
+└── ios/                # iOS project
+```
 
 ## License
 
-TBD
-# sudoku-game
+MIT License - see [LICENSE](LICENSE) for details.
