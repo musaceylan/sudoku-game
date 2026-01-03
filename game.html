@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" name="viewport" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#13daec">
@@ -11,65 +11,71 @@
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
-        rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-        rel="stylesheet" />
-    <script id="tailwind-config">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
         tailwind.config = {
             darkMode: "class",
             theme: {
                 extend: {
                     colors: {
-                        "primary": "#13daec",
-                        "primary-darker": "#21c2d2",
-                        "background-light": "#f6f8f8",
-                        "background-dark": "#102022",
-                        "cell-bg-light": "#ffffff",
-                        "cell-bg-dark": "#1a2c2e",
-                        "cell-highlight-light": "#e3f8fa",
-                        "cell-highlight-dark": "#1e3a3d",
-                        "cell-selected-light": "#13daec40",
-                        "cell-selected-dark": "#13daec59",
-                        "text-light": "#102022",
-                        "text-dark": "#e3f8fa",
-                        "text-secondary-light": "#5b6d70",
-                        "text-secondary-dark": "#a0b5b9",
-                        "text-user-light": "#007AFF",
-                        "text-user-dark": "#409cff",
-                        "hint-bg-light": "#fef8e3",
-                        "hint-bg-dark": "#362e15",
-                        "hint-text-light": "#FF9500",
-                        "hint-text-dark": "#ffc400",
-                        "error-light": "#ef4444",
-                        "error-dark": "#f87171",
+                        "primary": "var(--theme-primary, #13daec)",
+                        "primary-dark": "var(--theme-primary-dark, #0fb8c9)",
+                        "background-light": "#FAFAF9",
+                        "background-dark": "#121212",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#1E1E1E",
+                        "cell-bg-light": "#FFFFFF",
+                        "cell-bg-dark": "#252525",
+                        "text-light": "#1F2937",
+                        "text-dark": "#E0E0E0",
+                        "text-secondary-light": "#6B7280",
+                        "text-secondary-dark": "#9CA3AF",
                     },
                     fontFamily: {
-                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                        "display": ["var(--game-font, 'Plus Jakarta Sans')", "sans-serif"]
                     },
-                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
                 },
             },
         }
     </script>
     <style>
+        :root {
+            --theme-primary: #13daec;
+            --theme-primary-dark: #0fb8c9;
+            --theme-highlight: #e3f8fa;
+            --theme-highlight-dark: #1e3a3d;
+            --theme-accent: #5BB5C5;
+            --game-font: "Plus Jakarta Sans", sans-serif;
+            --primary-glow: rgba(19, 218, 236, 0.3);
+            --success: #6EE7B7;
+            --success-glow: rgba(110, 231, 183, 0.4);
+            --error: #F87171;
+            --error-bg: #FEE2E2;
+        }
+
+        .dark {
+            --primary-glow: rgba(19, 218, 236, 0.25);
+            --error-bg: #3D1F1F;
+        }
+
         .material-symbols-outlined {
-            font-variation-settings:
-                'FILL' 0,
-                'wght' 400,
-                'GRAD' 0,
-                'opsz' 24
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
 
         html, body {
             height: 100%;
             overflow: hidden;
         }
+
         body {
+            font-family: var(--game-font);
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
             user-select: none;
         }
+
         .game-container {
             height: 100%;
             padding-top: env(safe-area-inset-top);
@@ -78,122 +84,610 @@
             padding-right: env(safe-area-inset-right);
         }
 
-        /* 3x3 box borders */
-        .cell[data-col="2"], .cell[data-col="5"] {
-            border-right: 2px solid #64748b !important;
+        /* ============================================
+           GRID DESIGN
+           ============================================ */
+        #sudoku-grid {
+            background: linear-gradient(145deg, #E8E8E8, #D4D4D4);
+            border-radius: 16px;
+            padding: 3px;
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
-        .cell[data-row="2"], .cell[data-row="5"] {
-            border-bottom: 2px solid #64748b !important;
+
+        .dark #sudoku-grid {
+            background: linear-gradient(145deg, #2A2A2A, #1A1A1A);
+            box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.5);
         }
-        .dark .cell[data-col="2"], .dark .cell[data-col="5"] {
-            border-right: 2px solid #475569 !important;
-        }
-        .dark .cell[data-row="2"], .dark .cell[data-row="5"] {
-            border-bottom: 2px solid #475569 !important;
-        }
+
+        .cell[data-col="2"], .cell[data-col="5"] { margin-right: 3px; }
+        .cell[data-row="2"], .cell[data-row="5"] { margin-bottom: 3px; }
 
         .cell {
-            transition: transform 0.1s ease-in-out, box-shadow 0.1s ease-in-out;
+            position: relative;
+            background: #FFFFFF;
+            transition: all 0.15s ease;
             cursor: pointer;
+            font-weight: 600;
+            font-size: clamp(16px, 4vw, 24px);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #1F2937;
         }
+
+        .dark .cell {
+            background: #252525;
+            color: #E0E0E0;
+        }
+
+        .cell[data-row="0"][data-col="0"] { border-top-left-radius: 12px; }
+        .cell[data-row="0"][data-col="8"] { border-top-right-radius: 12px; }
+        .cell[data-row="8"][data-col="0"] { border-bottom-left-radius: 12px; }
+        .cell[data-row="8"][data-col="8"] { border-bottom-right-radius: 12px; }
+
+        .cell.given { font-weight: 700; }
+        .cell.user-entered { color: var(--theme-primary); }
 
         .cell.selected {
-            transform: scale(1.05);
-            z-index: 10;
-            box-shadow: 0 4px 12px rgba(19, 218, 236, 0.4);
+            background-color: #E8E4F0 !important;
+            box-shadow: inset 0 0 0 2px var(--theme-primary), 0 0 12px var(--primary-glow);
+            z-index: 5;
         }
 
-        .dark .cell.selected {
-            box-shadow: 0 4px 16px rgba(19, 218, 236, 0.2);
-        }
+        .dark .cell.selected { background-color: #3D3A50 !important; }
+
+        .cell.highlighted { background-color: #F0F4F8 !important; }
+        .dark .cell.highlighted { background-color: #1A1A2E !important; }
+
+        .cell.highlight-same { background-color: #FFF9E6 !important; }
+        .dark .cell.highlight-same { background-color: #2D2A1A !important; }
 
         .cell.error {
-            background-color: rgba(239, 68, 68, 0.2) !important;
-            animation: shake 0.3s;
+            background-color: var(--error-bg) !important;
+            animation: gentle-shake 0.4s ease;
         }
 
-        @keyframes shake {
+        @keyframes gentle-shake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-3px); }
+            40% { transform: translateX(3px); }
+            60% { transform: translateX(-2px); }
+            80% { transform: translateX(2px); }
+        }
 
-            0%,
-            100% {
-                transform: translateX(0);
-            }
+        @keyframes number-enter {
+            0% { opacity: 0; transform: scale(0.5); }
+            60% { transform: scale(1.08); }
+            100% { opacity: 1; transform: scale(1); }
+        }
 
-            25% {
-                transform: translateX(-5px);
-            }
+        .cell.number-pop { animation: number-enter 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
-            75% {
-                transform: translateX(5px);
+        @keyframes completion-sweep {
+            0% { background-color: transparent; }
+            40% { background-color: rgba(110, 231, 183, 0.35); }
+            100% { background-color: transparent; }
+        }
+
+        .cell.row-complete-anim { animation: completion-sweep 0.6s ease-out; }
+
+        /* Confetti */
+        @keyframes confetti-fall {
+            0% { transform: translateY(-20px) rotate(0deg) scale(1); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg) scale(0.5); opacity: 0; }
+        }
+
+        .confetti-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .confetti {
+            position: absolute;
+            width: 8px; height: 8px;
+            border-radius: 2px;
+            animation: confetti-fall 3s ease-out forwards;
+        }
+
+        /* Notes */
+        .cell-notes {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 100%; height: 100%;
+            padding: 2px;
+        }
+
+        .cell-notes span {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(7px, 1.8vw, 10px);
+            font-weight: 500;
+            opacity: 0.6;
+            color: #6B7280;
+        }
+
+        .dark .cell-notes span { color: #9CA3AF; }
+
+        /* ============================================
+           POPUP NUMPAD
+           ============================================ */
+        .popup-numpad {
+            position: fixed;
+            z-index: 1000;
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 12px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05);
+            animation: popup-appear 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .dark .popup-numpad {
+            background: #1E1E1E;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes popup-appear {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        .popup-numpad.hidden { display: none; }
+
+        .popup-numpad-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .popup-num-btn {
+            width: 44px; height: 44px;
+            border-radius: 50%;
+            background: #F3F4F6;
+            border: none;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1F2937;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .dark .popup-num-btn {
+            background: #2A2A2A;
+            color: #E0E0E0;
+        }
+
+        .popup-num-btn:active {
+            transform: scale(0.9);
+            background: var(--theme-primary);
+            color: white;
+        }
+
+        .popup-num-btn.complete {
+            opacity: 0.3;
+            text-decoration: line-through;
+        }
+
+        .popup-numpad-actions {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #E5E7EB;
+        }
+
+        .dark .popup-numpad-actions { border-color: #374151; }
+
+        .popup-action-btn {
+            width: 40px; height: 40px;
+            border-radius: 10px;
+            background: #F3F4F6;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6B7280;
+            transition: all 0.15s ease;
+        }
+
+        .dark .popup-action-btn {
+            background: #2A2A2A;
+            color: #9CA3AF;
+        }
+
+        .popup-action-btn:active { transform: scale(0.9); }
+
+        .popup-action-btn.active {
+            background: var(--theme-primary);
+            color: white;
+        }
+
+        .popup-close-btn {
+            background: #FEE2E2;
+            color: #EF4444;
+        }
+
+        .dark .popup-close-btn {
+            background: #3D1F1F;
+            color: #F87171;
+        }
+
+        /* ============================================
+           NUMBER PAD
+           ============================================ */
+        .numpad-btn {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 1;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 1.5px solid #E5E7EB;
+            font-size: clamp(18px, 5vw, 22px);
+            font-weight: 600;
+            color: #1F2937;
+            transition: all 0.15s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+        }
+
+        .dark .numpad-btn {
+            background: #252525;
+            border-color: #404040;
+            color: #E0E0E0;
+        }
+
+        .numpad-btn:active {
+            transform: scale(0.92);
+            background: #F3F4F6;
+        }
+
+        .dark .numpad-btn:active { background: #333333; }
+
+        .numpad-btn.numpad-complete {
+            opacity: 0.25;
+            border-style: dashed;
+        }
+
+        .numpad-btn::after {
+            content: attr(data-remaining);
+            position: absolute;
+            top: -2px; right: -2px;
+            min-width: 14px; height: 14px;
+            padding: 0 3px;
+            background: var(--theme-primary);
+            color: white;
+            font-size: 9px;
+            font-weight: 600;
+            border-radius: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .numpad-btn.numpad-complete::after { display: none; }
+
+        /* ============================================
+           ACTION BUTTONS
+           ============================================ */
+        .action-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 12px;
+            background: transparent;
+            border: none;
+            color: #6B7280;
+            font-size: 10px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            border-radius: 12px;
+        }
+
+        .action-btn .icon-wrap {
+            width: 36px; height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F3F4F6;
+            border-radius: 10px;
+            transition: all 0.15s ease;
+        }
+
+        .dark .action-btn .icon-wrap { background: #2A2A2A; }
+
+        .action-btn:active .icon-wrap {
+            transform: scale(0.9);
+            background: #E5E7EB;
+        }
+
+        .dark .action-btn:active .icon-wrap { background: #333333; }
+
+        .action-btn.notes-active .icon-wrap {
+            background: var(--theme-primary);
+            color: white;
+        }
+
+        .action-btn.hint-btn .icon-wrap {
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            color: #D97706;
+        }
+
+        /* ============================================
+           HEADER
+           ============================================ */
+        .difficulty-badge {
+            padding: 4px 12px;
+            background: #F0F4F8;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--theme-primary);
+            text-transform: uppercase;
+        }
+
+        .dark .difficulty-badge { background: #252525; }
+
+        .timer-display {
+            font-variant-numeric: tabular-nums;
+            font-weight: 600;
+            font-size: 15px;
+            color: #6B7280;
+        }
+
+        .dark .timer-display { color: #9CA3AF; }
+
+        .mistake-hearts { display: flex; gap: 4px; }
+        .heart { font-size: 14px; color: #F87171; transition: all 0.2s ease; }
+        .heart.empty { opacity: 0.2; }
+
+        .zen-badge {
+            background: linear-gradient(135deg, #C4B5FD, #A78BFA);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .timeattack-badge {
+            background: linear-gradient(135deg, #FCD34D, #F87171);
+            color: white;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 600;
+            animation: pulse-glow 2s infinite;
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(248, 113, 113, 0.4); }
+            50% { box-shadow: 0 0 0 6px rgba(248, 113, 113, 0); }
+        }
+
+        /* ============================================
+           LOADING OVERLAY
+           ============================================ */
+        .loading-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .dark .loading-overlay { background: rgba(18, 18, 18, 0.9); }
+
+        .loading-spinner {
+            width: 48px; height: 48px;
+            border: 4px solid #E5E7EB;
+            border-top-color: var(--theme-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-overlay.hidden { display: none; }
+
+        /* ============================================
+           ACHIEVEMENT NOTIFICATION
+           ============================================ */
+        .achievement-notification {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+            color: white;
+            padding: 16px 24px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 25px 50px -12px rgba(139, 92, 246, 0.5);
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .achievement-notification.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .achievement-icon { font-size: 32px; }
+        .achievement-title { font-size: 10px; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.5px; }
+        .achievement-name { font-size: 14px; font-weight: 700; }
+
+        /* ============================================
+           TOAST
+           ============================================ */
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #1F2937;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 3000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+
+        .dark .toast { background: #374151; }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ============================================
+           MODAL
+           ============================================ */
+        .modal-backdrop {
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+        }
+
+        .modal-card {
+            background: #FFFFFF;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .dark .modal-card { background: #1E1E1E; }
+
+        /* Accessibility */
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.01ms !important;
+                transition-duration: 0.01ms !important;
             }
         }
 
-        .cell.highlight-same {
-            background-color: rgba(19, 218, 236, 0.1) !important;
+        .cell:focus-visible,
+        .numpad-btn:focus-visible,
+        .action-btn:focus-visible {
+            outline: 2px solid var(--theme-primary);
+            outline-offset: 2px;
         }
     </style>
 </head>
 
 <body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+    </div>
+
     <div class="game-container flex flex-col bg-background-light dark:bg-background-dark">
         <!-- Header -->
-        <div class="flex items-center px-3 py-1 justify-between">
-            <button onclick="pauseGame()" class="p-1">
-                <span class="material-symbols-outlined text-xl" id="pause-icon">pause</span>
+        <header class="flex items-center justify-between px-4 py-2">
+            <button onclick="window.location.href='index.html'" class="p-2 -ml-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Go back">
+                <span class="material-symbols-outlined text-xl text-text-secondary-light dark:text-text-secondary-dark">arrow_back</span>
             </button>
-            <div class="flex flex-col items-center">
-                <span class="text-sm font-bold" id="difficulty-label">Easy</span>
-                <span class="text-xs text-red-500" id="mistakes">0/3 mistakes</span>
+
+            <div class="flex items-center gap-3">
+                <span class="difficulty-badge" id="difficulty-label">Easy</span>
+                <button onclick="pauseGame()" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Pause game">
+                    <span class="material-symbols-outlined text-lg text-text-secondary-light dark:text-text-secondary-dark" id="pause-icon">pause</span>
+                </button>
             </div>
-            <span class="text-primary text-sm font-bold" id="timer">00:00</span>
+
+            <div class="flex items-center gap-3">
+                <span class="timer-display" id="timer">00:00</span>
+                <div id="mistakes" class="mistake-hearts">
+                    <span class="heart">&#10084;</span>
+                    <span class="heart">&#10084;</span>
+                    <span class="heart">&#10084;</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Game Grid -->
+        <div class="flex-1 flex items-center justify-center px-4 min-h-0">
+            <div id="sudoku-grid" class="grid grid-cols-9 grid-rows-9 gap-px" style="width: min(85vw, calc(100vh - 240px)); height: min(85vw, calc(100vh - 240px));" role="grid" aria-label="Sudoku puzzle">
+            </div>
         </div>
 
-        <!-- Game Grid - calculates size based on available space -->
-        <div class="flex-1 flex items-center justify-center p-2 min-h-0">
-            <div id="sudoku-grid" class="grid grid-cols-9 grid-rows-9 gap-px bg-slate-300 dark:bg-slate-600 rounded-lg overflow-hidden" style="width: min(80vw, calc(100vh - 180px)); height: min(80vw, calc(100vh - 180px));">
+        <!-- Controls -->
+        <div class="px-4 pb-3">
+            <!-- Action Buttons -->
+            <div class="flex justify-center gap-1 mb-3">
+                <button onclick="undo()" class="action-btn" aria-label="Undo">
+                    <div class="icon-wrap">
+                        <span class="material-symbols-outlined text-lg">undo</span>
+                    </div>
+                    <span data-i18n="undo">Undo</span>
+                </button>
+                <button onclick="erase()" class="action-btn" aria-label="Erase">
+                    <div class="icon-wrap">
+                        <span class="material-symbols-outlined text-lg">backspace</span>
+                    </div>
+                    <span data-i18n="erase">Erase</span>
+                </button>
+                <button id="notes-btn" onclick="toggleNotes()" class="action-btn" aria-label="Toggle notes mode">
+                    <div class="icon-wrap">
+                        <span class="material-symbols-outlined text-lg">edit_note</span>
+                    </div>
+                    <span data-i18n="notes">Notes</span>
+                </button>
+                <button onclick="hint()" class="action-btn hint-btn" aria-label="Get hint">
+                    <div class="icon-wrap">
+                        <span class="material-symbols-outlined text-lg">lightbulb</span>
+                    </div>
+                    <span data-i18n="hint">Hint</span>
+                </button>
             </div>
-        </div>
 
-        <!-- Controls - fixed height -->
-        <div class="px-3 pb-2">
-            <div class="flex gap-2 mb-2 justify-center">
-                <button onclick="undo()" class="flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-cell-bg-dark rounded-lg shadow text-xs font-medium">
-                    <span class="material-symbols-outlined text-lg">undo</span>Undo
-                </button>
-                <button onclick="erase()" class="flex items-center gap-1 px-3 py-1.5 bg-white dark:bg-cell-bg-dark rounded-lg shadow text-xs font-medium">
-                    <span class="material-symbols-outlined text-lg">backspace</span>Erase
-                </button>
-                <button onclick="hint()" class="flex items-center gap-1 px-3 py-1.5 bg-amber-50 dark:bg-hint-bg-dark rounded-lg shadow text-xs font-medium text-amber-600 dark:text-hint-text-dark">
-                    <span class="material-symbols-outlined text-lg">lightbulb</span>Hint
-                </button>
-            </div>
-            <div id="number-pad" class="grid grid-cols-9 gap-1 max-w-xs mx-auto">
+            <!-- Number Pad -->
+            <div id="number-pad" class="grid grid-cols-9 gap-2 max-w-sm mx-auto px-2">
             </div>
         </div>
     </div>
 
+    <!-- Confetti Container -->
+    <div id="confetti-container" class="confetti-container"></div>
+
     <!-- Modal -->
-    <div id="modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
-        <div class="bg-white dark:bg-card-dark rounded-2xl p-6 mx-4 max-w-sm w-full shadow-2xl transform transition-all">
+    <div id="modal" class="fixed inset-0 modal-backdrop flex items-center justify-center z-50 hidden">
+        <div class="modal-card p-8 mx-4 max-w-sm w-full transform transition-all">
             <div id="modal-icon" class="text-6xl text-center mb-4">🎉</div>
-            <h3 id="modal-title" class="text-xl font-bold text-center mb-2">Congratulations!</h3>
-            <p id="modal-message" class="text-center text-gray-600 dark:text-gray-300 mb-4">You solved the puzzle!</p>
-            <div id="modal-stats" class="flex justify-center gap-6 mb-6">
-                <div class="text-center">
+            <h3 id="modal-title" class="text-2xl font-bold text-center mb-2 text-text-light dark:text-text-dark" data-i18n="congratulations">Congratulations!</h3>
+            <p id="modal-message" class="text-center text-text-secondary-light dark:text-text-secondary-dark mb-6" data-i18n="youSolvedPuzzle">You solved the puzzle!</p>
+
+            <div id="modal-stats" class="grid grid-cols-2 gap-4 mb-6">
+                <div class="text-center p-3 bg-gray-100 dark:bg-gray-800 rounded-xl">
                     <div class="text-2xl font-bold text-primary" id="modal-time">00:00</div>
-                    <div class="text-xs text-gray-500">Time</div>
+                    <div class="text-xs text-text-secondary-light dark:text-text-secondary-dark mt-1" data-i18n="time">Time</div>
                 </div>
-                <div class="text-center">
+                <div class="text-center p-3 bg-gray-100 dark:bg-gray-800 rounded-xl">
                     <div class="text-2xl font-bold text-primary" id="modal-mistakes">0</div>
-                    <div class="text-xs text-gray-500">Mistakes</div>
+                    <div class="text-xs text-text-secondary-light dark:text-text-secondary-dark mt-1" data-i18n="mistakes">Mistakes</div>
                 </div>
             </div>
-            <button onclick="closeModal()" class="w-full py-3 bg-gradient-to-r from-primary to-primary-darker text-white font-bold rounded-xl shadow-lg active:scale-95 transition-transform">
+
+            <button onclick="closeModal()" class="w-full py-4 bg-primary hover:opacity-90 text-white font-semibold rounded-2xl shadow-lg active:scale-[0.98] transition-all" data-i18n="continue">
                 Continue
             </button>
         </div>
     </div>
 
+    <script src="translations.js"></script>
     <script src="sudoku.js"></script>
 </body>
 

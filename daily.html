@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#13daec">
+    <title>Daily Challenge - Sudoku Play</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13daec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#102022",
+                        "text-light": "#102022",
+                        "text-dark": "#f6f8f8",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1c2c2e",
+                    },
+                    fontFamily: { "display": ["Plus Jakarta Sans", "sans-serif"] },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            min-height: 100dvh;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        }
+        .calendar-day {
+            transition: all 0.2s;
+        }
+        .calendar-day.completed {
+            background: linear-gradient(135deg, #34d399, #10b981);
+            color: white;
+        }
+        .calendar-day.today {
+            border: 2px solid #13daec;
+            font-weight: bold;
+        }
+        .calendar-day.missed {
+            background: #fee2e2;
+            color: #ef4444;
+        }
+        .dark .calendar-day.missed {
+            background: #450a0a;
+        }
+        .countdown {
+            font-variant-numeric: tabular-nums;
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Header -->
+        <div class="flex items-center p-4 pb-2 justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm z-10">
+            <button onclick="window.location.href='index.html'" class="flex size-12 shrink-0 items-center justify-start transition-transform active:scale-90">
+                <span class="material-symbols-outlined text-3xl">arrow_back_ios_new</span>
+            </button>
+            <h1 class="text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center" data-i18n="dailyChallenge">Daily Challenge</h1>
+            <div class="size-12 shrink-0"></div>
+        </div>
+
+        <main class="flex-grow p-4 space-y-4 overflow-y-auto">
+            <!-- Today's Challenge Card -->
+            <div class="bg-gradient-to-br from-primary to-cyan-600 rounded-2xl p-5 text-white shadow-lg relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="absolute bottom-0 left-0 w-24 h-24 bg-white/10 rounded-full translate-y-1/2 -translate-x-1/2"></div>
+
+                <div class="relative z-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="material-symbols-outlined">calendar_today</span>
+                        <span class="text-sm opacity-90" id="today-date">Loading...</span>
+                    </div>
+                    <h2 class="text-2xl font-bold mb-1" data-i18n="todaysChallenge">Today's Puzzle</h2>
+                    <p class="text-sm opacity-80 mb-4" id="challenge-status">Ready to play!</p>
+
+                    <div id="play-section">
+                        <button onclick="startDailyChallenge()" id="play-btn" class="w-full py-3 bg-white text-primary font-bold rounded-xl shadow-lg active:scale-95 transition-transform flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">play_arrow</span>
+                            <span data-i18n="startChallenge">Play Now</span>
+                        </button>
+                    </div>
+
+                    <div id="completed-section" class="hidden">
+                        <div class="flex items-center justify-between bg-white/20 rounded-xl p-3 mb-3">
+                            <div class="text-center">
+                                <p class="text-2xl font-bold" id="completed-time">--:--</p>
+                                <p class="text-xs opacity-75" data-i18n="time">Time</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold" id="completed-mistakes">0</p>
+                                <p class="text-xs opacity-75" data-i18n="mistakes">Mistakes</p>
+                            </div>
+                            <div class="text-center">
+                                <p class="text-2xl font-bold" id="completed-xp">+0</p>
+                                <p class="text-xs opacity-75" data-i18n="xp">XP</p>
+                            </div>
+                        </div>
+                        <p class="text-center text-sm opacity-80" data-i18n="comeBackTomorrow">Come back tomorrow for a new challenge!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Streak Card -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="text-4xl">🔥</div>
+                        <div>
+                            <p class="text-2xl font-bold" id="streak-count">0</p>
+                            <p class="text-sm text-gray-500" data-i18n="currentStreak">Day Streak</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm text-gray-500" data-i18n="bestStreak">Best</p>
+                        <p class="text-lg font-bold text-primary" id="best-streak">0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Next Challenge Countdown -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <span class="material-symbols-outlined text-primary">schedule</span>
+                        <span class="font-medium" data-i18n="nextChallenge">Next Challenge</span>
+                    </div>
+                    <span class="countdown font-mono font-bold text-primary" id="countdown">--:--:--</span>
+                </div>
+            </div>
+
+            <!-- Calendar -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">date_range</span>
+                    <span data-i18n="thisMonth">This Month</span>
+                </h3>
+                <div id="weekday-headers" class="grid grid-cols-7 gap-1 text-center text-xs mb-2">
+                    <!-- Generated by JS -->
+                </div>
+                <div id="calendar-grid" class="grid grid-cols-7 gap-1">
+                    <!-- Generated by JS -->
+                </div>
+                <div class="flex items-center justify-center gap-4 mt-3 text-xs text-gray-500">
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-500"></span> <span data-i18n="completed">Completed</span></span>
+                    <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-200 dark:bg-red-900"></span> <span data-i18n="missed">Missed</span></span>
+                </div>
+            </div>
+
+            <!-- Daily Stats -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">leaderboard</span>
+                    <span data-i18n="dailyStats">Daily Stats</span>
+                </h3>
+                <div class="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                        <p class="text-2xl font-bold text-green-500" id="daily-completed">0</p>
+                        <p class="text-xs text-gray-500" data-i18n="completed">Completed</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-primary" id="daily-avg-time">--:--</p>
+                        <p class="text-xs text-gray-500" data-i18n="avgTime">Avg Time</p>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-purple-500" id="daily-total-xp">0</p>
+                        <p class="text-xs text-gray-500" data-i18n="xpEarned">XP Earned</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="translations.js"></script>
+    <script>
+        // Dark mode
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Apply translations
+        document.addEventListener('DOMContentLoaded', applyTranslations);
+
+        // Get today's date key
+        function getTodayKey() {
+            const now = new Date();
+            return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+        }
+
+        // Format date for display
+        function formatDate(date) {
+            const options = { weekday: 'long', month: 'long', day: 'numeric' };
+            return date.toLocaleDateString('en-US', options);
+        }
+
+        // Load daily challenge data
+        function loadDailyData() {
+            const dailyData = JSON.parse(localStorage.getItem('sudoku_daily') || '{}');
+            const stats = JSON.parse(localStorage.getItem('sudoku_stats') || '{}');
+            const todayKey = getTodayKey();
+            const todayCompleted = dailyData[todayKey];
+
+            // Update date display
+            document.getElementById('today-date').textContent = formatDate(new Date());
+
+            // Update streak
+            document.getElementById('streak-count').textContent = stats.streakCurrent || 0;
+            document.getElementById('best-streak').textContent = stats.streakBest || 0;
+
+            // Update completed status
+            if (todayCompleted) {
+                document.getElementById('play-section').classList.add('hidden');
+                document.getElementById('completed-section').classList.remove('hidden');
+                document.getElementById('challenge-status').textContent = 'Completed! ✓';
+                document.getElementById('completed-time').textContent = formatTime(todayCompleted.time);
+                document.getElementById('completed-mistakes').textContent = todayCompleted.mistakes || 0;
+                document.getElementById('completed-xp').textContent = '+' + (todayCompleted.xp || 0);
+            }
+
+            // Update daily stats
+            const completedDays = Object.keys(dailyData).length;
+            document.getElementById('daily-completed').textContent = completedDays;
+
+            let totalTime = 0;
+            let totalXP = 0;
+            Object.values(dailyData).forEach(d => {
+                totalTime += d.time || 0;
+                totalXP += d.xp || 0;
+            });
+
+            document.getElementById('daily-avg-time').textContent = completedDays > 0
+                ? formatTime(Math.round(totalTime / completedDays))
+                : '--:--';
+            document.getElementById('daily-total-xp').textContent = totalXP;
+
+            // Render calendar
+            renderCalendar(dailyData);
+        }
+
+        function formatTime(seconds) {
+            if (!seconds) return '--:--';
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function renderCalendar(dailyData) {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth();
+            const today = now.getDate();
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            // Empty cells for days before month starts
+            for (let i = 0; i < firstDay; i++) {
+                const empty = document.createElement('div');
+                empty.className = 'aspect-square';
+                grid.appendChild(empty);
+            }
+
+            // Day cells
+            for (let day = 1; day <= daysInMonth; day++) {
+                const cell = document.createElement('div');
+                cell.className = 'calendar-day aspect-square flex items-center justify-center rounded-lg text-sm';
+                cell.textContent = day;
+
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+
+                if (day === today) {
+                    cell.classList.add('today');
+                }
+
+                if (dailyData[dateKey]) {
+                    cell.classList.add('completed');
+                } else if (day < today) {
+                    cell.classList.add('missed');
+                }
+
+                grid.appendChild(cell);
+            }
+        }
+
+        function startDailyChallenge() {
+            // Set daily challenge mode
+            localStorage.setItem('sudoku_mode', 'daily');
+            localStorage.setItem('sudoku_difficulty', 'medium'); // Daily is always medium
+            localStorage.removeItem('sudoku_current_game');
+            window.location.href = 'game.html';
+        }
+
+        // Countdown to next day
+        function updateCountdown() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+
+            const diff = tomorrow - now;
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('countdown').textContent =
+                `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+        }
+
+        // Render weekday headers
+        function renderWeekdayHeaders() {
+            const container = document.getElementById('weekday-headers');
+            const weekdays = t('weekdays') || ['S', 'M', 'T', 'W', 'T', 'F', 'S'];
+            container.innerHTML = weekdays.map(d => `<span class="text-gray-400">${d}</span>`).join('');
+        }
+
+        // Initialize
+        renderWeekdayHeaders();
+        loadDailyData();
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+
+</html>

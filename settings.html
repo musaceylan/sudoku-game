@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#13daec">
+    <title>Settings - Sudoku Play</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "var(--theme-primary, #13daec)",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#102022",
+                        "text-light": "#102022",
+                        "text-dark": "#f6f8f8",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1c2c2e",
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        :root {
+            --theme-primary: #13daec;
+        }
+        body {
+            min-height: 100dvh;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 28px;
+            background: #E5E7EB;
+            border-radius: 14px;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .dark .toggle-switch { background: #374151; }
+        .toggle-switch.active { background: var(--theme-primary); }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 3px;
+            left: 3px;
+            transition: transform 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .toggle-switch.active::after { transform: translateX(20px); }
+
+        .theme-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 3px solid transparent;
+        }
+        .theme-option.selected { border-color: #1F2937; transform: scale(1.1); }
+        .dark .theme-option.selected { border-color: white; }
+
+        .font-option {
+            padding: 8px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            background: #F3F4F6;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        .dark .font-option { background: #374151; }
+        .font-option.selected { background: var(--theme-primary); color: white; }
+
+        .sound-pack-option {
+            padding: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            background: #F3F4F6;
+            transition: all 0.2s ease;
+            text-align: center;
+            flex: 1;
+        }
+        .dark .sound-pack-option { background: #374151; }
+        .sound-pack-option.selected { background: var(--theme-primary); color: white; }
+
+        .lang-option {
+            padding: 10px 16px;
+            border-radius: 12px;
+            cursor: pointer;
+            background: #F3F4F6;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .dark .lang-option { background: #374151; }
+        .lang-option.selected { background: var(--theme-primary); color: white; }
+
+        .slider-input {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #E5E7EB;
+            outline: none;
+        }
+        .dark .slider-input { background: #374151; }
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--theme-primary);
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Header -->
+        <div class="flex items-center p-4 pb-2 justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm z-10">
+            <button onclick="window.location.href='index.html'" class="flex size-12 shrink-0 items-center justify-start transition-transform active:scale-90">
+                <span class="material-symbols-outlined text-3xl">arrow_back_ios_new</span>
+            </button>
+            <h1 class="text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center" id="page-title">Settings</h1>
+            <div class="size-12 shrink-0"></div>
+        </div>
+
+        <main class="flex-grow p-4 space-y-4 overflow-y-auto pb-20">
+
+            <!-- Language Section -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">translate</span>
+                    <span id="label-language">Language</span>
+                </h3>
+                <div class="flex gap-2 flex-wrap" id="language-selector">
+                    <!-- Languages will be populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Appearance Section -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">palette</span>
+                    <span id="label-appearance">Appearance</span>
+                </h3>
+
+                <!-- Dark Mode -->
+                <div class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                    <div>
+                        <p class="font-medium" id="label-dark-mode">Dark Mode</p>
+                        <p class="text-xs text-gray-500" id="desc-dark-mode">Enable dark theme</p>
+                    </div>
+                    <div id="toggle-dark" class="toggle-switch" onclick="toggleDarkMode()"></div>
+                </div>
+
+                <!-- Theme Color -->
+                <div class="py-3 border-b border-gray-100 dark:border-gray-700">
+                    <p class="font-medium mb-3" id="label-theme">Theme Color</p>
+                    <div class="flex gap-3 flex-wrap">
+                        <div class="theme-option" style="background: linear-gradient(135deg, #13daec, #0fb8c9);" data-theme="default" onclick="setTheme('default')"></div>
+                        <div class="theme-option" style="background: linear-gradient(135deg, #22c55e, #16a34a);" data-theme="forest" onclick="setTheme('forest')"></div>
+                        <div class="theme-option" style="background: linear-gradient(135deg, #f97316, #ea580c);" data-theme="sunset" onclick="setTheme('sunset')"></div>
+                        <div class="theme-option" style="background: linear-gradient(135deg, #8b5cf6, #7c3aed);" data-theme="purple" onclick="setTheme('purple')"></div>
+                        <div class="theme-option" style="background: linear-gradient(135deg, #f43f5e, #e11d48);" data-theme="rose" onclick="setTheme('rose')"></div>
+                    </div>
+                </div>
+
+                <!-- Font -->
+                <div class="py-3">
+                    <p class="font-medium mb-3" id="label-font">Font</p>
+                    <div class="flex gap-2 flex-wrap">
+                        <div class="font-option" data-font="system" onclick="setFont('system')" style="font-family: system-ui;">System</div>
+                        <div class="font-option" data-font="jakarta" onclick="setFont('jakarta')" style="font-family: 'Plus Jakarta Sans';">Jakarta</div>
+                        <div class="font-option" data-font="rounded" onclick="setFont('rounded')" style="font-family: 'Nunito';">Rounded</div>
+                        <div class="font-option" data-font="mono" onclick="setFont('mono')" style="font-family: monospace;">Mono</div>
+                        <div class="font-option" data-font="serif" onclick="setFont('serif')" style="font-family: Georgia;">Serif</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sound & Haptics Section -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">volume_up</span>
+                    <span id="label-sound">Sound & Haptics</span>
+                </h3>
+
+                <!-- Sound Toggle -->
+                <div class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                    <div>
+                        <p class="font-medium" id="label-sound-effects">Sound Effects</p>
+                        <p class="text-xs text-gray-500" id="desc-sound-effects">Play sounds for actions</p>
+                    </div>
+                    <div id="toggle-sound" class="toggle-switch" onclick="toggleSound()"></div>
+                </div>
+
+                <!-- Sound Volume -->
+                <div class="py-3 border-b border-gray-100 dark:border-gray-700">
+                    <div class="flex justify-between mb-2">
+                        <p class="font-medium" id="label-volume">Volume</p>
+                        <span id="volume-value" class="text-sm text-gray-500">50%</span>
+                    </div>
+                    <input type="range" min="0" max="100" value="50" class="slider-input" id="volume-slider" oninput="setVolume(this.value)">
+                </div>
+
+                <!-- Sound Pack -->
+                <div class="py-3 border-b border-gray-100 dark:border-gray-700">
+                    <p class="font-medium mb-3" id="label-sound-pack">Sound Pack</p>
+                    <div class="flex gap-2">
+                        <div class="sound-pack-option" data-pack="default" onclick="setSoundPack('default')">
+                            <div class="text-lg mb-1">🎵</div>
+                            <div class="text-xs">Default</div>
+                        </div>
+                        <div class="sound-pack-option" data-pack="minimal" onclick="setSoundPack('minimal')">
+                            <div class="text-lg mb-1">🔔</div>
+                            <div class="text-xs">Minimal</div>
+                        </div>
+                        <div class="sound-pack-option" data-pack="arcade" onclick="setSoundPack('arcade')">
+                            <div class="text-lg mb-1">🎮</div>
+                            <div class="text-xs">Arcade</div>
+                        </div>
+                        <div class="sound-pack-option" data-pack="zen" onclick="setSoundPack('zen')">
+                            <div class="text-lg mb-1">🧘</div>
+                            <div class="text-xs">Zen</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Haptic Toggle -->
+                <div class="flex items-center justify-between py-3">
+                    <div>
+                        <p class="font-medium" id="label-haptic">Haptic Feedback</p>
+                        <p class="text-xs text-gray-500" id="desc-haptic">Vibrate on actions</p>
+                    </div>
+                    <div id="toggle-haptic" class="toggle-switch" onclick="toggleHaptic()"></div>
+                </div>
+            </div>
+
+            <!-- Gameplay Section -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">sports_esports</span>
+                    <span id="label-gameplay">Gameplay</span>
+                </h3>
+
+                <!-- Popup Numpad -->
+                <div class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                    <div>
+                        <p class="font-medium" id="label-popup-numpad">Popup Numpad</p>
+                        <p class="text-xs text-gray-500" id="desc-popup-numpad">Show number picker near selected cell</p>
+                    </div>
+                    <div id="toggle-popup-numpad" class="toggle-switch" onclick="toggleSetting('popupNumpad')"></div>
+                </div>
+
+                <!-- Highlight Same Numbers -->
+                <div class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                    <div>
+                        <p class="font-medium" id="label-highlight-same">Highlight Same Numbers</p>
+                        <p class="text-xs text-gray-500" id="desc-highlight-same">Highlight matching numbers on the board</p>
+                    </div>
+                    <div id="toggle-highlight-same" class="toggle-switch" onclick="toggleSetting('highlightSameNumbers')"></div>
+                </div>
+
+                <!-- Highlight Row/Col/Box -->
+                <div class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                    <div>
+                        <p class="font-medium" id="label-highlight-rcb">Highlight Row/Column/Box</p>
+                        <p class="text-xs text-gray-500" id="desc-highlight-rcb">Highlight related cells when selecting</p>
+                    </div>
+                    <div id="toggle-highlight-rcb" class="toggle-switch" onclick="toggleSetting('highlightRowColBox')"></div>
+                </div>
+
+                <!-- Auto-remove Notes -->
+                <div class="flex items-center justify-between py-3 border-b border-gray-100 dark:border-gray-700">
+                    <div>
+                        <p class="font-medium" id="label-auto-notes">Auto-remove Notes</p>
+                        <p class="text-xs text-gray-500" id="desc-auto-notes">Automatically remove notes when placing numbers</p>
+                    </div>
+                    <div id="toggle-auto-notes" class="toggle-switch" onclick="toggleSetting('autoRemoveNotes')"></div>
+                </div>
+
+                <!-- Show Remaining Count -->
+                <div class="flex items-center justify-between py-3">
+                    <div>
+                        <p class="font-medium" id="label-remaining">Show Remaining Count</p>
+                        <p class="text-xs text-gray-500" id="desc-remaining">Display count on number buttons</p>
+                    </div>
+                    <div id="toggle-remaining" class="toggle-switch" onclick="toggleSetting('showRemainingCount')"></div>
+                </div>
+            </div>
+
+            <!-- Data Section -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">database</span>
+                    <span id="label-data">Data</span>
+                </h3>
+
+                <button onclick="resetAllData()" class="w-full py-3 text-red-500 text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors">
+                    <span id="btn-reset-all">Reset All Data</span>
+                </button>
+            </div>
+
+            <!-- App Info -->
+            <div class="text-center text-xs text-gray-400 py-4">
+                <p>Sudoku Play v2.0.0</p>
+                <p class="mt-1">Made with ❤️</p>
+            </div>
+        </main>
+    </div>
+
+    <script src="translations.js"></script>
+    <script>
+        // Settings
+        let settings = loadSettings();
+
+        function loadSettings() {
+            const defaults = {
+                darkMode: false,
+                theme: 'default',
+                font: 'jakarta',
+                language: 'en',
+                soundEnabled: true,
+                soundPack: 'default',
+                soundVolume: 0.5,
+                hapticEnabled: true,
+                popupNumpad: true,
+                highlightSameNumbers: true,
+                highlightRowColBox: true,
+                autoRemoveNotes: true,
+                showRemainingCount: true
+            };
+
+            const saved = localStorage.getItem('sudoku_settings');
+            if (saved) {
+                try {
+                    return { ...defaults, ...JSON.parse(saved) };
+                } catch (e) {
+                    return defaults;
+                }
+            }
+
+            // Check legacy settings
+            if (localStorage.getItem('darkMode') === 'true') defaults.darkMode = true;
+            if (localStorage.getItem('sudokuTheme')) defaults.theme = localStorage.getItem('sudokuTheme');
+            if (localStorage.getItem('soundEnabled') === 'false') defaults.soundEnabled = false;
+            if (localStorage.getItem('sudokuLanguage')) defaults.language = localStorage.getItem('sudokuLanguage');
+
+            return defaults;
+        }
+
+        function saveSettings() {
+            localStorage.setItem('sudoku_settings', JSON.stringify(settings));
+        }
+
+        function renderLanguageSelector() {
+            const container = document.getElementById('language-selector');
+            container.innerHTML = '';
+
+            Object.entries(LANGUAGES).forEach(([code, info]) => {
+                const div = document.createElement('div');
+                div.className = 'lang-option' + (settings.language === code ? ' selected' : '');
+                div.dataset.lang = code;
+                div.onclick = () => setLanguage(code);
+                div.innerHTML = `<span>${info.flag}</span><span>${info.name}</span>`;
+                container.appendChild(div);
+            });
+        }
+
+        function updateUI() {
+            // Render language selector
+            renderLanguageSelector();
+
+            // Update labels based on language
+            document.getElementById('page-title').textContent = t('settings');
+            document.getElementById('label-language').textContent = t('language');
+            document.getElementById('label-appearance').textContent = t('appearance');
+            document.getElementById('label-dark-mode').textContent = t('darkMode');
+            document.getElementById('desc-dark-mode').textContent = t('darkModeDesc');
+            document.getElementById('label-theme').textContent = t('themeColor');
+            document.getElementById('label-font').textContent = t('font');
+            document.getElementById('label-sound').textContent = t('sound');
+            document.getElementById('label-sound-effects').textContent = t('soundEffects');
+            document.getElementById('desc-sound-effects').textContent = t('soundEffectsDesc');
+            document.getElementById('label-volume').textContent = t('volume');
+            document.getElementById('label-sound-pack').textContent = t('soundPack');
+            document.getElementById('label-haptic').textContent = t('haptic');
+            document.getElementById('desc-haptic').textContent = t('hapticDesc');
+            document.getElementById('label-gameplay').textContent = t('gameplay');
+            document.getElementById('label-popup-numpad').textContent = t('popupNumpad');
+            document.getElementById('desc-popup-numpad').textContent = t('popupNumpadDesc');
+            document.getElementById('label-highlight-same').textContent = t('highlightSame');
+            document.getElementById('desc-highlight-same').textContent = t('highlightSameDesc');
+            document.getElementById('label-highlight-rcb').textContent = t('highlightRcb');
+            document.getElementById('desc-highlight-rcb').textContent = t('highlightRcbDesc');
+            document.getElementById('label-auto-notes').textContent = t('autoNotes');
+            document.getElementById('desc-auto-notes').textContent = t('autoNotesDesc');
+            document.getElementById('label-remaining').textContent = t('remaining');
+            document.getElementById('desc-remaining').textContent = t('remainingDesc');
+            document.getElementById('label-data').textContent = t('data');
+            document.getElementById('btn-reset-all').textContent = t('resetAll');
+
+            // Dark mode
+            document.getElementById('toggle-dark').classList.toggle('active', settings.darkMode);
+            document.documentElement.classList.toggle('dark', settings.darkMode);
+
+            // Theme
+            document.querySelectorAll('.theme-option').forEach(el => {
+                el.classList.toggle('selected', el.dataset.theme === settings.theme);
+            });
+            applyTheme(settings.theme);
+
+            // Font
+            document.querySelectorAll('.font-option').forEach(el => {
+                el.classList.toggle('selected', el.dataset.font === settings.font);
+            });
+
+            // Sound
+            document.getElementById('toggle-sound').classList.toggle('active', settings.soundEnabled);
+            document.getElementById('volume-slider').value = settings.soundVolume * 100;
+            document.getElementById('volume-value').textContent = Math.round(settings.soundVolume * 100) + '%';
+
+            // Sound Pack
+            document.querySelectorAll('.sound-pack-option').forEach(el => {
+                el.classList.toggle('selected', el.dataset.pack === settings.soundPack);
+            });
+
+            // Haptic
+            document.getElementById('toggle-haptic').classList.toggle('active', settings.hapticEnabled);
+
+            // Gameplay toggles
+            document.getElementById('toggle-popup-numpad').classList.toggle('active', settings.popupNumpad);
+            document.getElementById('toggle-highlight-same').classList.toggle('active', settings.highlightSameNumbers);
+            document.getElementById('toggle-highlight-rcb').classList.toggle('active', settings.highlightRowColBox);
+            document.getElementById('toggle-auto-notes').classList.toggle('active', settings.autoRemoveNotes);
+            document.getElementById('toggle-remaining').classList.toggle('active', settings.showRemainingCount);
+        }
+
+        function applyTheme(themeName) {
+            const themes = {
+                default: '#13daec',
+                forest: '#22c55e',
+                sunset: '#f97316',
+                purple: '#8b5cf6',
+                rose: '#f43f5e'
+            };
+            document.documentElement.style.setProperty('--theme-primary', themes[themeName] || themes.default);
+        }
+
+        // Actions
+        function setLanguage(lang) {
+            settings.language = lang;
+            localStorage.setItem('sudokuLanguage', lang);
+            saveSettings();
+            updateUI();
+        }
+
+        function toggleDarkMode() {
+            settings.darkMode = !settings.darkMode;
+            localStorage.setItem('darkMode', settings.darkMode);
+            saveSettings();
+            updateUI();
+        }
+
+        function setTheme(theme) {
+            settings.theme = theme;
+            localStorage.setItem('sudokuTheme', theme);
+            saveSettings();
+            updateUI();
+        }
+
+        function setFont(font) {
+            settings.font = font;
+            localStorage.setItem('sudokuFont', font);
+            saveSettings();
+            updateUI();
+        }
+
+        function toggleSound() {
+            settings.soundEnabled = !settings.soundEnabled;
+            localStorage.setItem('soundEnabled', settings.soundEnabled);
+            saveSettings();
+            updateUI();
+        }
+
+        function setVolume(value) {
+            settings.soundVolume = value / 100;
+            localStorage.setItem('soundVolume', settings.soundVolume);
+            document.getElementById('volume-value').textContent = value + '%';
+            saveSettings();
+        }
+
+        function setSoundPack(pack) {
+            settings.soundPack = pack;
+            localStorage.setItem('soundPack', pack);
+            saveSettings();
+            updateUI();
+
+            // Play test sound
+            playTestSound(pack);
+        }
+
+        function playTestSound(pack) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                const freqs = {
+                    default: 800,
+                    minimal: 440,
+                    arcade: 1200,
+                    zen: 300
+                };
+
+                osc.frequency.value = freqs[pack] || 800;
+                osc.type = pack === 'arcade' ? 'square' : 'sine';
+                gain.gain.setValueAtTime(settings.soundVolume * 0.3, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.1);
+            } catch (e) {}
+        }
+
+        function toggleHaptic() {
+            settings.hapticEnabled = !settings.hapticEnabled;
+            localStorage.setItem('hapticEnabled', settings.hapticEnabled);
+            saveSettings();
+            updateUI();
+
+            if (settings.hapticEnabled && navigator.vibrate) {
+                navigator.vibrate(20);
+            }
+        }
+
+        function toggleSetting(key) {
+            settings[key] = !settings[key];
+            saveSettings();
+            updateUI();
+        }
+
+        function resetAllData() {
+            if (confirm(t('resetConfirm'))) {
+                localStorage.clear();
+                location.reload();
+            }
+        }
+
+        // Init
+        updateUI();
+    </script>
+</body>
+
+</html>

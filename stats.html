@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0, viewport-fit=cover" name="viewport" />
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#13daec">
+    <title>Statistics - Sudoku Play</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com" rel="preconnect" />
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#13daec",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#102022",
+                        "text-light": "#102022",
+                        "text-dark": "#f6f8f8",
+                        "card-light": "#ffffff",
+                        "card-dark": "#1c2c2e",
+                        "beginner": "#22d3ee",
+                        "easy": "#a3e635",
+                        "medium": "#38bdf8",
+                        "hard": "#f97316",
+                        "expert": "#ef4444",
+                        "master": "#8b5cf6"
+                    },
+                    fontFamily: {
+                        "display": ["Plus Jakarta Sans", "sans-serif"]
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        body {
+            min-height: 100dvh;
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+        }
+    </style>
+</head>
+
+<body class="bg-background-light dark:bg-background-dark font-display text-text-light dark:text-text-dark">
+    <div class="relative flex h-auto min-h-screen w-full flex-col overflow-x-hidden">
+        <!-- Header -->
+        <div class="flex items-center p-4 pb-2 justify-between sticky top-0 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm z-10">
+            <button onclick="window.location.href='index.html'"
+                class="flex size-12 shrink-0 items-center justify-start transition-transform active:scale-90">
+                <span class="material-symbols-outlined text-3xl">arrow_back_ios_new</span>
+            </button>
+            <h1 class="text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center" data-i18n="statistics">Statistics</h1>
+            <div class="size-12 shrink-0"></div>
+        </div>
+
+        <main class="flex-grow p-4 space-y-4 overflow-y-auto">
+            <!-- Level & XP Card -->
+            <div class="bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between mb-3">
+                    <div>
+                        <p class="text-sm opacity-90" data-i18n="level">Level</p>
+                        <p class="text-4xl font-bold" id="player-level">1</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-sm opacity-90">Total XP</p>
+                        <p class="text-2xl font-bold" id="total-xp">0</p>
+                    </div>
+                </div>
+                <div class="bg-white/20 rounded-full h-3 overflow-hidden">
+                    <div id="xp-bar" class="h-full bg-white rounded-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <p class="text-xs opacity-75 mt-1 text-center" id="xp-progress">0 / 100 XP to next level</p>
+            </div>
+
+            <!-- Streak Card -->
+            <div class="bg-gradient-to-br from-orange-400 to-red-500 rounded-2xl p-5 text-white shadow-lg">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm opacity-90" data-i18n="currentStreak">Current Streak</p>
+                        <p class="text-4xl font-bold" id="current-streak">0</p>
+                        <p class="text-xs opacity-75" data-i18n="days">days</p>
+                    </div>
+                    <div class="text-6xl">🔥</div>
+                </div>
+                <div class="mt-3 pt-3 border-t border-white/20 flex justify-between text-sm">
+                    <span><span data-i18n="bestStreak">Best Streak</span>: <strong id="best-streak">0</strong> <span data-i18n="days">days</span></span>
+                </div>
+            </div>
+
+            <!-- Overview Stats -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                    <p class="text-2xl font-bold text-primary" id="games-played">0</p>
+                    <p class="text-sm text-gray-500" data-i18n="gamesPlayed">Games Played</p>
+                </div>
+                <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                    <p class="text-2xl font-bold text-green-500" id="games-won">0</p>
+                    <p class="text-sm text-gray-500" data-i18n="gamesWon">Games Won</p>
+                </div>
+                <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                    <p class="text-2xl font-bold text-blue-500" id="win-rate">0%</p>
+                    <p class="text-sm text-gray-500" data-i18n="winRate">Win Rate</p>
+                </div>
+                <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                    <p class="text-2xl font-bold text-purple-500" id="avg-time">--:--</p>
+                    <p class="text-sm text-gray-500" data-i18n="avgTime">Avg. Time</p>
+                </div>
+            </div>
+
+            <!-- Best Times by Difficulty -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">timer</span>
+                    <span data-i18n="bestTimes">Best Times</span>
+                </h3>
+                <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-beginner"></span>
+                            <span data-i18n="beginner">Beginner</span>
+                        </div>
+                        <span class="font-mono font-bold" id="best-beginner">--:--</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-easy"></span>
+                            <span data-i18n="easy">Easy</span>
+                        </div>
+                        <span class="font-mono font-bold" id="best-easy">--:--</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-medium"></span>
+                            <span data-i18n="medium">Medium</span>
+                        </div>
+                        <span class="font-mono font-bold" id="best-medium">--:--</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-hard"></span>
+                            <span data-i18n="hard">Hard</span>
+                        </div>
+                        <span class="font-mono font-bold" id="best-hard">--:--</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-expert"></span>
+                            <span data-i18n="expert">Expert</span>
+                        </div>
+                        <span class="font-mono font-bold" id="best-expert">--:--</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-master"></span>
+                            <span data-i18n="master">Master</span>
+                        </div>
+                        <span class="font-mono font-bold" id="best-master">--:--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Games by Difficulty -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">bar_chart</span>
+                    <span data-i18n="gamesByDifficulty">Games by Difficulty</span>
+                </h3>
+                <div class="space-y-3">
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-beginner font-medium" data-i18n="beginner">Beginner</span>
+                            <span id="beginner-stats">0/0</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div id="beginner-bar" class="h-full bg-beginner rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-easy font-medium" data-i18n="easy">Easy</span>
+                            <span id="easy-stats">0/0</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div id="easy-bar" class="h-full bg-easy rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-medium font-medium" data-i18n="medium">Medium</span>
+                            <span id="medium-stats">0/0</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div id="medium-bar" class="h-full bg-medium rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-hard font-medium" data-i18n="hard">Hard</span>
+                            <span id="hard-stats">0/0</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div id="hard-bar" class="h-full bg-hard rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-expert font-medium" data-i18n="expert">Expert</span>
+                            <span id="expert-stats">0/0</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div id="expert-bar" class="h-full bg-expert rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex justify-between text-sm mb-1">
+                            <span class="text-master font-medium" data-i18n="master">Master</span>
+                            <span id="master-stats">0/0</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                            <div id="master-bar" class="h-full bg-master rounded-full transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Other Stats -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-4 shadow-sm">
+                <h3 class="font-bold mb-3 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-primary">insights</span>
+                    <span data-i18n="otherStats">Other Stats</span>
+                </h3>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-lg font-bold text-red-500" id="total-mistakes">0</p>
+                        <p class="text-xs text-gray-500" data-i18n="totalMistakes">Total Mistakes</p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-amber-500" id="hints-used">0</p>
+                        <p class="text-xs text-gray-500" data-i18n="hintsUsed">Hints Used</p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-primary" id="total-time">0h</p>
+                        <p class="text-xs text-gray-500" data-i18n="totalPlayTime">Total Play Time</p>
+                    </div>
+                    <div>
+                        <p class="text-lg font-bold text-red-400" id="games-lost">0</p>
+                        <p class="text-xs text-gray-500" data-i18n="gamesLost">Games Lost</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Reset Stats Button -->
+            <button onclick="resetStats()" class="w-full py-3 text-red-500 text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-colors" data-i18n="resetAllStats">
+                Reset All Statistics
+            </button>
+        </main>
+    </div>
+
+    <script src="translations.js"></script>
+    <script>
+        // Load dark mode preference
+        if (localStorage.getItem('darkMode') === 'true') {
+            document.documentElement.classList.add('dark');
+        }
+
+        // Apply translations
+        document.addEventListener('DOMContentLoaded', applyTranslations);
+
+        function formatTime(seconds) {
+            if (!seconds) return '--:--';
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+
+        function formatHours(seconds) {
+            if (!seconds) return '0h';
+            const hours = Math.floor(seconds / 3600);
+            const mins = Math.floor((seconds % 3600) / 60);
+            if (hours > 0) {
+                return `${hours}h ${mins}m`;
+            }
+            return `${mins}m`;
+        }
+
+        // XP level thresholds (must match sudoku.js)
+        const levelXP = [0, 100, 250, 500, 800, 1200, 1700, 2300, 3000, 4000, 5000, 6500, 8000, 10000, 12500, 15000, 18000, 22000, 27000, 33000, 40000];
+
+        function getLevel(xp) {
+            for (let i = levelXP.length - 1; i >= 0; i--) {
+                if (xp >= levelXP[i]) return i + 1;
+            }
+            return 1;
+        }
+
+        function loadStats() {
+            const saved = localStorage.getItem('sudoku_stats');
+            const stats = saved ? JSON.parse(saved) : null;
+
+            if (!stats) {
+                return;
+            }
+
+            // Level & XP
+            const totalXP = stats.totalXP || 0;
+            const level = getLevel(totalXP);
+            const currentLevelXP = levelXP[level - 1] || 0;
+            const nextLevelXP = levelXP[level] || totalXP;
+            const progress = totalXP - currentLevelXP;
+            const needed = nextLevelXP - currentLevelXP;
+            const percentage = needed > 0 ? Math.min(100, (progress / needed) * 100) : 100;
+
+            document.getElementById('player-level').textContent = level;
+            document.getElementById('total-xp').textContent = totalXP.toLocaleString();
+            document.getElementById('xp-bar').style.width = percentage + '%';
+            document.getElementById('xp-progress').textContent = `${progress} / ${needed} XP to next level`;
+
+            // Streak
+            document.getElementById('current-streak').textContent = stats.streakCurrent || 0;
+            document.getElementById('best-streak').textContent = stats.streakBest || 0;
+
+            // Overview
+            document.getElementById('games-played').textContent = stats.gamesPlayed || 0;
+            document.getElementById('games-won').textContent = stats.gamesWon || 0;
+            document.getElementById('games-lost').textContent = stats.gamesLost || 0;
+
+            const winRate = stats.gamesPlayed > 0
+                ? Math.round((stats.gamesWon / stats.gamesPlayed) * 100)
+                : 0;
+            document.getElementById('win-rate').textContent = winRate + '%';
+
+            const avgTime = stats.gamesWon > 0
+                ? Math.round(stats.totalTime / stats.gamesWon)
+                : 0;
+            document.getElementById('avg-time').textContent = formatTime(avgTime);
+
+            // Best times
+            document.getElementById('best-beginner').textContent = formatTime(stats.bestTimes?.beginner);
+            document.getElementById('best-easy').textContent = formatTime(stats.bestTimes?.easy);
+            document.getElementById('best-medium').textContent = formatTime(stats.bestTimes?.medium);
+            document.getElementById('best-hard').textContent = formatTime(stats.bestTimes?.hard);
+            document.getElementById('best-expert').textContent = formatTime(stats.bestTimes?.expert);
+            document.getElementById('best-master').textContent = formatTime(stats.bestTimes?.master);
+
+            // By difficulty
+            const difficulties = ['beginner', 'easy', 'medium', 'hard', 'expert', 'master'];
+            difficulties.forEach(diff => {
+                const data = stats.byDifficulty?.[diff] || { played: 0, won: 0 };
+                document.getElementById(`${diff}-stats`).textContent = `${data.won}/${data.played}`;
+                const percentage = data.played > 0 ? (data.won / data.played) * 100 : 0;
+                document.getElementById(`${diff}-bar`).style.width = percentage + '%';
+            });
+
+            // Other stats
+            document.getElementById('total-mistakes').textContent = stats.totalMistakes || 0;
+            document.getElementById('hints-used').textContent = stats.hintsUsed || 0;
+            document.getElementById('total-time').textContent = formatHours(stats.totalTime);
+        }
+
+        function resetStats() {
+            if (confirm(t('resetConfirm'))) {
+                localStorage.removeItem('sudoku_stats');
+                // Also remove legacy best times
+                localStorage.removeItem('sudoku_best_easy');
+                localStorage.removeItem('sudoku_best_medium');
+                localStorage.removeItem('sudoku_best_hard');
+                localStorage.removeItem('sudoku_best_expert');
+                location.reload();
+            }
+        }
+
+        // Load stats on page load
+        loadStats();
+    </script>
+</body>
+
+</html>

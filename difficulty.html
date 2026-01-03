@@ -28,10 +28,12 @@
                         "text-dark": "#f6f8f8",
                         "card-light": "#ffffff",
                         "card-dark": "#1c2c2e",
+                        "beginner": "#22d3ee",
                         "easy": "#a3e635",
                         "medium": "#38bdf8",
                         "hard": "#f97316",
-                        "expert": "#ef4444"
+                        "expert": "#ef4444",
+                        "master": "#8b5cf6"
                     },
                     fontFamily: {
                         "display": ["Plus Jakarta Sans", "sans-serif"]
@@ -43,10 +45,12 @@
                         "full": "9999px"
                     },
                     boxShadow: {
+                        'soft-beginner': '0 4px 16px -4px rgb(34 211 238 / 0.4)',
                         'soft-easy': '0 4px 16px -4px rgb(163 230 53 / 0.4)',
                         'soft-medium': '0 4px 16px -4px rgb(56 189 248 / 0.4)',
                         'soft-hard': '0 4px 16px -4px rgb(249 115 22 / 0.4)',
                         'soft-expert': '0 4px 16px -4px rgb(239 68 68 / 0.4)',
+                        'soft-master': '0 4px 16px -4px rgb(139 92 246 / 0.4)',
                     }
                 },
             },
@@ -67,6 +71,10 @@
             padding-right: env(safe-area-inset-right);
         }
 
+        .btn-gradient-beginner {
+            background: linear-gradient(to top right, #22d3ee, #67e8f9);
+        }
+
         .btn-gradient-easy {
             background: linear-gradient(to top right, #a3e635, #bef264);
         }
@@ -82,6 +90,10 @@
         .btn-gradient-expert {
             background: linear-gradient(to top right, #ef4444, #f87171);
         }
+
+        .btn-gradient-master {
+            background: linear-gradient(to top right, #8b5cf6, #a78bfa);
+        }
     </style>
 </head>
 
@@ -93,27 +105,61 @@
                 class="flex size-12 shrink-0 items-center justify-start transition-transform active:scale-90">
                 <span class="material-symbols-outlined text-3xl">arrow_back_ios_new</span>
             </button>
-            <h1 class="text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center">New Game</h1>
+            <h1 class="text-xl font-bold leading-tight tracking-[-0.015em] flex-1 text-center" data-i18n="newGame">New Game</h1>
             <div class="size-12 shrink-0"></div>
         </div>
         <main class="flex-grow p-3 space-y-3 overflow-y-auto">
+            <!-- Game Mode Toggle -->
+            <div class="bg-card-light dark:bg-card-dark rounded-xl p-3 shadow-sm mb-4">
+                <p class="text-xs text-gray-500 mb-2 text-center" data-i18n="gameMode">Game Mode</p>
+                <div class="flex gap-2">
+                    <button id="mode-classic" onclick="setMode('classic')"
+                        class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 bg-primary text-white">
+                        <span class="material-symbols-outlined text-base align-middle mr-1">sports_esports</span><span data-i18n="classic">Classic</span>
+                    </button>
+                    <button id="mode-zen" onclick="setMode('zen')"
+                        class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                        <span class="material-symbols-outlined text-base align-middle mr-1">spa</span><span data-i18n="zen">Zen</span>
+                    </button>
+                    <button id="mode-timeattack" onclick="setMode('timeattack')"
+                        class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300">
+                        <span class="material-symbols-outlined text-base align-middle mr-1">timer</span><span data-i18n="timeAttack">Rush</span>
+                    </button>
+                </div>
+                <p id="mode-description" class="text-xs text-gray-400 mt-2 text-center" data-i18n="classicDesc">3 mistakes allowed, timer counts up</p>
+            </div>
+
+            <!-- Beginner -->
+            <div
+                class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-beginner hover:scale-[1.03] active:scale-[0.98]">
+                <div class="flex items-center gap-3 p-3">
+                    <div class="flex items-center justify-center size-14 rounded-lg bg-beginner/20 dark:bg-beginner/10">
+                        <span class="text-3xl">🌱</span>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="text-base font-bold leading-tight" data-i18n="beginner">Beginner</p>
+                        <p class="text-sm text-beginner">☆<span class="opacity-30">☆☆☆☆☆</span></p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="beginner-time"><span data-i18n="bestTime">Best</span>: --:--</p>
+                    </div>
+                    <button onclick="startGame('beginner')"
+                        class="btn-gradient-beginner px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95" data-i18n="play">Play</button>
+                </div>
+            </div>
+
             <!-- Easy -->
             <div
                 class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-easy hover:scale-[1.03] active:scale-[0.98]">
                 <div class="flex items-center gap-3 p-3">
                     <div class="flex items-center justify-center size-14 rounded-lg bg-easy/20 dark:bg-easy/10">
-                        <div class="w-full bg-center bg-no-repeat aspect-square bg-contain"
-                            data-alt="A simple green leaf icon"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuB9o7375hhTNGGLQmDbkOTbEV69BpqYq4OVhidbuvnM0G2o_166eg-3zU420fAlkt1aPgJ54lYDd01HT4DDKTLGB1KN9kGiG04KLnTazejFmFDtl1t2PsZ-Z-qeZPdi-XP4XkhYP3Yit3xNyQLQO4rqrty5A3MLbwAEzBrzQg_CZD1E1QUZi2jQzrRo5AmByc3OE24qusOWXSdZi8bulCcTGhVf53Tl02Q9CgyqRe_QLPzF74UMZLsTBsRyuTD69m0M41K2MgCYc2dl");'>
-                        </div>
+                        <span class="text-3xl">🍀</span>
                     </div>
                     <div class="flex-grow">
-                        <p class="text-base font-bold leading-tight">Easy</p>
-                        <p class="text-sm text-easy">★<span class="opacity-30">☆☆☆</span></p>
-                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="easy-time">Best: --:--</p>
+                        <p class="text-base font-bold leading-tight" data-i18n="easy">Easy</p>
+                        <p class="text-sm text-easy">★<span class="opacity-30">☆☆☆☆☆</span></p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="easy-time"><span data-i18n="bestTime">Best</span>: --:--</p>
                     </div>
                     <button onclick="startGame('easy')"
-                        class="btn-gradient-easy px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95">Play</button>
+                        class="btn-gradient-easy px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95" data-i18n="play">Play</button>
                 </div>
             </div>
 
@@ -122,18 +168,15 @@
                 class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-medium hover:scale-[1.03] active:scale-[0.98]">
                 <div class="flex items-center gap-3 p-3">
                     <div class="flex items-center justify-center size-14 rounded-lg bg-medium/20 dark:bg-medium/10">
-                        <div class="w-full bg-center bg-no-repeat aspect-square bg-contain"
-                            data-alt="A light blue brain icon"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCSWQgYP6aTi1dExHq-2jydajemHMo150UHgGJuNA-kv6DeHHshe37yqBHQ3OtOerjpehkfPRWpNjtexOSMKSrZoVMyqYZpRmKrOuOFnSFomBmqGE6YBX0-1kGWOEZUB7cNXiVd9YYpuWiHk0bYI_wkMZ4tNOf-KiXKC3woNJZxg5hFucr7WIBeRxg2MuXv3w8LAzgDg9F0whJxn1nK9Nkmn1_XwXB7cg5nTMBnNUOTALhhegZQwj9Sv78YOSvT8W3sBPAJz8AIqYAn");'>
-                        </div>
+                        <span class="text-3xl">🧩</span>
                     </div>
                     <div class="flex-grow">
-                        <p class="text-base font-bold leading-tight">Medium</p>
-                        <p class="text-sm text-medium">★★<span class="opacity-30">☆☆</span></p>
-                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="medium-time">Best: --:--</p>
+                        <p class="text-base font-bold leading-tight" data-i18n="medium">Medium</p>
+                        <p class="text-sm text-medium">★★<span class="opacity-30">☆☆☆☆</span></p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="medium-time"><span data-i18n="bestTime">Best</span>: --:--</p>
                     </div>
                     <button onclick="startGame('medium')"
-                        class="btn-gradient-medium px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95">Play</button>
+                        class="btn-gradient-medium px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95" data-i18n="play">Play</button>
                 </div>
             </div>
 
@@ -142,18 +185,15 @@
                 class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-hard hover:scale-[1.03] active:scale-[0.98]">
                 <div class="flex items-center gap-3 p-3">
                     <div class="flex items-center justify-center size-14 rounded-lg bg-hard/20 dark:bg-hard/10">
-                        <div class="w-full bg-center bg-no-repeat aspect-square bg-contain"
-                            data-alt="An orange flame icon"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDOVOkjQzWGXBLlZMU75boqRo1e4gpExUdj1UTcYysmN8rIAOeGrDMQUArHOncUAsxO4MpZzVKUhbM5EztoXeItX7rM_yim-MbpLscSWOsUbWTd-JmaeUKIk5Fw145d5pYOAqssgfbWjqn13Pe7fQeAzLnk0H7NdS7szx77SK5T4IbwPip3MgxnEcJuBDr6vZ6kflGuLeRJtLRRJfPn3_EC6pOe0Ynk7oyRyuTrzZC8hGlCMQojul6Gah-upnWFJPTgfzvk5EY_ATsn");'>
-                        </div>
+                        <span class="text-3xl">🔥</span>
                     </div>
                     <div class="flex-grow">
-                        <p class="text-base font-bold leading-tight">Hard</p>
-                        <p class="text-sm text-hard">★★★<span class="opacity-30">☆</span></p>
-                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="hard-time">Best: --:--</p>
+                        <p class="text-base font-bold leading-tight" data-i18n="hard">Hard</p>
+                        <p class="text-sm text-hard">★★★<span class="opacity-30">☆☆☆</span></p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="hard-time"><span data-i18n="bestTime">Best</span>: --:--</p>
                     </div>
                     <button onclick="startGame('hard')"
-                        class="btn-gradient-hard px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95">Play</button>
+                        class="btn-gradient-hard px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95" data-i18n="play">Play</button>
                 </div>
             </div>
 
@@ -162,22 +202,38 @@
                 class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-expert hover:scale-[1.03] active:scale-[0.98]">
                 <div class="flex items-center gap-3 p-3">
                     <div class="flex items-center justify-center size-14 rounded-lg bg-expert/20 dark:bg-expert/10">
-                        <div class="w-full bg-center bg-no-repeat aspect-square bg-contain" data-alt="A red skull icon"
-                            style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBbqIpbJMCKoOWDdJ7wxXeCLSDs4ptkZXOo3qs9QlqKZ2Ksv8naLA8-1QshPVXPEDFB4VXqfHF2QUHJ5MePGrNMyRsUnSgHYzxSroY75DfbRfJ-xQ3n1BjvKt1eMm4UQ56uTBY6MgflLKRjksalY0uqrIIIRJqu3eEojiezg3YQYUccWAMTdFCtLEZNbSbIMIaBrWbV3ZxUkfA6Bf5cGbT1pDVBnEtnnWeDWUFM0ODqAacvTqdFA87XV4Zmd5rQ0IXlOfgGtByBBabe");'>
-                        </div>
+                        <span class="text-3xl">💀</span>
                     </div>
                     <div class="flex-grow">
-                        <p class="text-base font-bold leading-tight">Expert</p>
-                        <p class="text-sm text-expert">★★★★</p>
-                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="expert-time">Best: --:--</p>
+                        <p class="text-base font-bold leading-tight" data-i18n="expert">Expert</p>
+                        <p class="text-sm text-expert">★★★★<span class="opacity-30">☆☆</span></p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="expert-time"><span data-i18n="bestTime">Best</span>: --:--</p>
                     </div>
                     <button onclick="startGame('expert')"
-                        class="btn-gradient-expert px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95">Play</button>
+                        class="btn-gradient-expert px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95" data-i18n="play">Play</button>
+                </div>
+            </div>
+
+            <!-- Master -->
+            <div
+                class="group/card block rounded-xl bg-card-light dark:bg-card-dark overflow-hidden transition-all duration-300 shadow-soft-master hover:scale-[1.03] active:scale-[0.98]">
+                <div class="flex items-center gap-3 p-3">
+                    <div class="flex items-center justify-center size-14 rounded-lg bg-master/20 dark:bg-master/10">
+                        <span class="text-3xl">👑</span>
+                    </div>
+                    <div class="flex-grow">
+                        <p class="text-base font-bold leading-tight" data-i18n="master">Master</p>
+                        <p class="text-sm text-master">★★★★★<span class="opacity-30">☆</span></p>
+                        <p class="text-xs text-text-light/70 dark:text-text-dark/70" id="master-time"><span data-i18n="bestTime">Best</span>: --:--</p>
+                    </div>
+                    <button onclick="startGame('master')"
+                        class="btn-gradient-master px-4 py-2 rounded-lg text-white font-bold text-sm shadow-sm transition-transform duration-200 active:scale-95" data-i18n="play">Play</button>
                 </div>
             </div>
         </main>
     </div>
 
+    <script src="translations.js"></script>
     <script>
         // Load dark mode preference
         if (localStorage.getItem('darkMode') === 'true') {
@@ -186,21 +242,60 @@
 
         // Load best times
         function loadBestTimes() {
-            const difficulties = ['easy', 'medium', 'hard', 'expert'];
+            const difficulties = ['beginner', 'easy', 'medium', 'hard', 'expert', 'master'];
             difficulties.forEach(diff => {
                 const bestTime = localStorage.getItem(`sudoku_best_${diff}`);
                 if (bestTime) {
-                    document.getElementById(`${diff}-time`).textContent = `Best Time: ${bestTime}`;
+                    const el = document.getElementById(`${diff}-time`);
+                    if (el) el.innerHTML = `<span data-i18n="bestTime">${t('bestTime')}</span>: ${bestTime}`;
                 }
             });
         }
 
+        let currentMode = localStorage.getItem('sudoku_mode') || 'classic';
+
+        function setMode(mode) {
+            currentMode = mode;
+            localStorage.setItem('sudoku_mode', mode);
+            updateModeUI();
+        }
+
+        function updateModeUI() {
+            const classicBtn = document.getElementById('mode-classic');
+            const zenBtn = document.getElementById('mode-zen');
+            const timeattackBtn = document.getElementById('mode-timeattack');
+            const description = document.getElementById('mode-description');
+
+            // Reset all buttons
+            const inactiveClass = 'flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-300';
+            classicBtn.className = inactiveClass;
+            zenBtn.className = inactiveClass;
+            timeattackBtn.className = inactiveClass;
+
+            if (currentMode === 'classic') {
+                classicBtn.className = 'flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 bg-primary text-white';
+                description.textContent = t('classicDesc');
+            } else if (currentMode === 'zen') {
+                zenBtn.className = 'flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 bg-gradient-to-r from-purple-500 to-violet-500 text-white';
+                description.textContent = t('zenDesc');
+            } else if (currentMode === 'timeattack') {
+                timeattackBtn.className = 'flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-all duration-200 bg-gradient-to-r from-amber-500 to-red-500 text-white';
+                description.textContent = t('timeAttackDesc');
+            }
+        }
+
         function startGame(difficulty) {
             localStorage.setItem('sudoku_difficulty', difficulty);
+            localStorage.removeItem('sudoku_current_game'); // Start fresh
             window.location.href = 'game.html';
         }
 
-        loadBestTimes();
+        // Apply translations on load
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBestTimes();
+            updateModeUI();
+            applyTranslations();
+        });
     </script>
 </body>
 
