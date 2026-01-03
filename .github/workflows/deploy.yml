@@ -1,0 +1,20 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 116.203.78.184
+          username: musa
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/musa/projects/sudoku-game
+            git pull origin main
+            echo "Deployed at $(date)"

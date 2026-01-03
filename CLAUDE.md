@@ -20,44 +20,19 @@
 
 ## Deploy
 
-Bu proje **static web** - dosyalar direkt serve ediliyor.
+**OTOMATIK DEPLOY AKTIF** - GitHub'a push ettiğinde sunucu otomatik güncellenir.
 
-### Deploy Komutu
-```bash
-cd /home/musa/projects/sudoku-game && git pull origin main
-```
+GitHub Actions workflow: `.github/workflows/deploy.yml`
+
+### Ne Yapman Gerekiyor
+1. Kod değişikliği yap
+2. Commit et
+3. `git push origin main`
+4. **Bitti!** Sunucu otomatik güncellenir (1-2 dakika)
+
+### Test Et
+https://sudoku.ceylan.world
 
 ### Nginx Config
-- **Config:** /etc/nginx/sites-available/sudoku.ceylan.world
 - **Root:** /home/musa/projects/sudoku-game
-- **SSL:** Let's Encrypt (otomatik)
-
-## Dosya Yapisi
-
-```
-sudoku-game/
-├── index.html        # Ana menu
-├── game.html         # Oyun sayfasi
-├── daily.html        # Gunluk challenge
-├── difficulty.html   # Zorluk secimi
-├── achievements.html # Basarimlar
-├── android/          # Android Capacitor
-├── ios/              # iOS Capacitor
-└── manifest.json     # PWA manifest
-```
-
-## Calisma Prensipleri
-
-- Kod degisikligi yaptiktan sonra DEPLOY YAP
-- Deploy = `git pull` (sunucuda)
-- Test et: https://sudoku.ceylan.world
-
-### Deploy Tam Komut (SSH ile)
-```bash
-ssh musa@116.203.78.184 "cd /home/musa/projects/sudoku-game && git pull origin main"
-```
-
-### Veya Sunucudaysan
-```bash
-cd /home/musa/projects/sudoku-game && git pull origin main
-```
+- **SSL:** Let's Encrypt
